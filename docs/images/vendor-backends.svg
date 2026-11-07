@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="392" viewBox="0 0 760 392" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+<rect width="760" height="392" rx="12" fill="#ffffff"/>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#e2e8f0"/><line x1="0" y1="0" x2="0" y2="6" stroke="#94a3b8" stroke-width="2"/></pattern></defs>
+<text x="24" y="32" font-size="17" fill="#0f172a" font-weight="bold" text-anchor="start">One common core; each GPU vendor plugs in a small backend</text>
+<rect x="24" y="52" width="712" height="96" rx="10" fill="#f8fafc" stroke="#cbd5e1" />
+<text x="40" y="76" font-size="14" fill="#0f172a" font-weight="bold" text-anchor="start">Common core (same for every vendor)</text>
+<rect x="40" y="92" width="123" height="40" rx="8" fill="#ffffff" stroke="#cbd5e1" />
+<text x="101.5" y="116" font-size="13" fill="#0f172a" font-weight="normal" text-anchor="middle">Claim watcher</text>
+<rect x="179" y="92" width="123" height="40" rx="8" fill="#ffffff" stroke="#cbd5e1" />
+<text x="240.5" y="116" font-size="13" fill="#0f172a" font-weight="normal" text-anchor="middle">Turn planner</text>
+<rect x="318" y="92" width="123" height="40" rx="8" fill="#ffffff" stroke="#cbd5e1" />
+<text x="379.5" y="116" font-size="13" fill="#0f172a" font-weight="normal" text-anchor="middle">Caps, priority</text>
+<rect x="457" y="92" width="123" height="40" rx="8" fill="#ffffff" stroke="#cbd5e1" />
+<text x="518.5" y="116" font-size="13" fill="#0f172a" font-weight="normal" text-anchor="middle">Safety lease</text>
+<rect x="596" y="92" width="123" height="40" rx="8" fill="#ffffff" stroke="#cbd5e1" />
+<text x="657.5" y="116" font-size="13" fill="#0f172a" font-weight="normal" text-anchor="middle">Metrics, CLI</text>
+<line x1="380" y1="148" x2="380" y2="170" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<rect x="24" y="172" width="712" height="40" rx="8" fill="#e2e8f0" stroke="#94a3b8" />
+<text x="380" y="197" font-size="14" fill="#0f172a" font-weight="bold" text-anchor="middle">Backend interface: Find, Control, Measure, Describe</text>
+<line x1="107" y1="212" x2="107" y2="234" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="107" y1="308" x2="107" y2="330" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<rect x="24" y="236" width="166" height="72" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+<text x="107" y="260" font-size="14" fill="#0f172a" font-weight="bold" text-anchor="middle">NVIDIA (first)</text>
+<text x="107" y="280" font-size="12" fill="#475569" font-weight="normal" text-anchor="middle">nvidiactl timeslice</text>
+<text x="107" y="297" font-size="12" fill="#475569" font-weight="normal" text-anchor="middle">closed driver</text>
+<line x1="289" y1="212" x2="289" y2="234" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="289" y1="308" x2="289" y2="330" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<rect x="206" y="236" width="166" height="72" rx="8" fill="#f8fafc" stroke="#cbd5e1" />
+<text x="289" y="260" font-size="14" fill="#0f172a" font-weight="bold" text-anchor="middle">AMD</text>
+<text x="289" y="280" font-size="12" fill="#475569" font-weight="normal" text-anchor="middle">amdkfd, MES firmware</text>
+<text x="289" y="297" font-size="12" fill="#475569" font-weight="normal" text-anchor="middle">open driver</text>
+<line x1="471" y1="212" x2="471" y2="234" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="471" y1="308" x2="471" y2="330" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<rect x="388" y="236" width="166" height="72" rx="8" fill="#f8fafc" stroke="#cbd5e1" />
+<text x="471" y="260" font-size="14" fill="#0f172a" font-weight="bold" text-anchor="middle">Intel</text>
+<text x="471" y="280" font-size="12" fill="#475569" font-weight="normal" text-anchor="middle">xe exec queues, GuC</text>
+<text x="471" y="297" font-size="12" fill="#475569" font-weight="normal" text-anchor="middle">open driver</text>
+<line x1="653" y1="212" x2="653" y2="234" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="653" y1="308" x2="653" y2="330" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<rect x="570" y="236" width="166" height="72" rx="8" fill="#f8fafc" stroke="#cbd5e1" />
+<text x="653" y="260" font-size="14" fill="#0f172a" font-weight="bold" text-anchor="middle">Ascend and others</text>
+<text x="653" y="280" font-size="12" fill="#475569" font-weight="normal" text-anchor="middle">vNPU partitions</text>
+<text x="653" y="297" font-size="12" fill="#475569" font-weight="normal" text-anchor="middle">mostly closed</text>
+<rect x="24" y="332" width="712" height="36" rx="8" fill="#ffffff" stroke="#94a3b8" stroke-dasharray="4,4"/>
+<text x="380" y="355" font-size="13" fill="#475569" font-weight="normal" text-anchor="middle">GPU hardware: each vendor's own scheduler does the actual turn-taking</text>
+</svg>
