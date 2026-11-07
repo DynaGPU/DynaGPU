@@ -1,0 +1,15 @@
+# app channel group: hClient=0xc1d00361 hTsg=0x5c000014 (compute, engineType=1)
+# as normal user
+route=B step=SET_TIMESLICE us=5000 ioctl=0 status=0x23 FAIL
+route=B step=GET_TIMESLICE ioctl=0 status=0x23 value_us=0
+route=C step=ALLOC_ROOT ioctl=0 status=0x0 hClient=0xc1d00364
+route=C step=REGISTER_FD dev=/dev/nvidia0 ioctl=0
+route=C step=ALLOC_DEVICE ioctl=0 status=0x0 hDevice=0xd0000001
+route=C step=DUP_TSG ioctl=0 status=0x1b hDup=0xd0000002
+# as root
+route=B step=SET_TIMESLICE us=5000 ioctl=0 status=0x23 FAIL
+route=B step=GET_TIMESLICE ioctl=0 status=0x23 value_us=0
+route=C step=ALLOC_ROOT ioctl=0 status=0x0 hClient=0xc1d00365
+route=C step=REGISTER_FD dev=/dev/nvidia0 ioctl=0
+route=C step=ALLOC_DEVICE ioctl=0 status=0x0 hDevice=0xd0000001
+route=C step=DUP_TSG ioctl=0 status=0x1b hDup=0xd0000002

@@ -8,7 +8,7 @@
 
 DynaGPU lets several apps share one NVIDIA GPU and makes sure each one gets the share of GPU time it was promised. You can give an app a guaranteed share, put a hard limit on another, and let urgent work go first. If one app crashes, the others keep running.
 
-> **Status: early design.** The core idea is being tested on real hardware before the first release. Nothing here is ready for production yet, and names and settings may change.
+> **Status: early design.** The first feasibility tests passed on real hardware: on an NVIDIA L40S, timeslice lengths gave 70/30 and 90/10 splits within 0.4 points of target ([week-1 results](spike/results/week1.md)). Nothing here is ready for production yet, and names and settings may change.
 
 ## Contents
 
@@ -314,7 +314,7 @@ DynaGPU is built to **fail open**: if anything goes wrong, your GPU goes back to
 
 | Phase | Goal | Status |
 | --- | --- | --- |
-| 0. Feasibility test (3 weeks) | Prove on one GPU that turn lengths give the agreed shares, pausing is fast, and paused work resumes correctly | Next |
+| 0. Feasibility test (3 weeks) | Prove on one GPU that turn lengths give the agreed shares, pausing is fast, and paused work resumes correctly | Week 1 passed ([results](spike/results/week1.md)); weeks 2–3 next |
 | 1. First release | Node agent, helper and NRI plugin, with guaranteed shares | Planned |
 | 2. Limits and priority | Hard limits per time window and instant pausing for urgent work | Planned |
 | 3. Visibility | Metrics, a ready-made dashboard and the command-line tool | Planned |

@@ -1,0 +1,9 @@
+[dynagpu 9898 1794061977.623942] shim loaded
+[dynagpu 9898 1794061978.673708] TSG_ALLOC fd=9 hClient=0xc1d0031b hParent=0x5c000002 hTsg=0x5c000014 engineType=1
+[dynagpu 9898 1794061978.722146] APP_CONTROL cmd=0xa06c0101 hObject=0x5c000014 status=0x0
+[dynagpu 9898 1794061978.723772] TSG_ALLOC fd=9 hClient=0xc1d0031b hParent=0x5c000002 hTsg=0x5c00003d engineType=11
+[dynagpu 9898 1794061978.736123] APP_CONTROL cmd=0xa06c0101 hObject=0x5c00003d status=0x0
+[dynagpu 9898 1794061978.737768] TSG_ALLOC fd=9 hClient=0xc1d0031b hParent=0x5c000002 hTsg=0x5c00004b engineType=12
+[dynagpu 9898 1794061978.760404] APP_CONTROL cmd=0xa06c0101 hObject=0x5c00004b status=0x0
+[dynagpu 9898 1794061978.795353] APP_SET_TIMESLICE hObject=0x5c000014 app_value_us=2048
+[dynagpu 9898 1794061978.795649] APP_CONTROL cmd=0xa06c0103 hObject=0x5c000014 status=0x0

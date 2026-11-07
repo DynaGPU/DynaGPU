@@ -1,0 +1,11 @@
+case,rep,kps_a,kps_b,a_vs_solo
+b-bursty-5ms-per-100ms,0,11713.5,234.0,0.9568
+b-bursty-5ms-per-100ms,1,11710.5,234.0,0.9565
+b-bursty-5ms-per-100ms,2,11708.0,234.0,0.9563
+b-bursty-5ms-per-100ms,3,11702.5,234.0,0.9559
+b-bursty-5ms-per-100ms,4,11697.5,234.0,0.9554
+b-idle-1ms-per-1s,0,12219.0,8.0,0.998
+b-idle-1ms-per-1s,1,12215.0,8.0,0.9977
+b-idle-1ms-per-1s,2,12215.0,8.0,0.9977
+b-idle-1ms-per-1s,3,12203.5,8.0,0.9968
+b-idle-1ms-per-1s,4,12203.0,8.0,0.9967

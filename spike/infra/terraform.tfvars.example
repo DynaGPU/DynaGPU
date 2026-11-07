@@ -1,0 +1,2 @@
+project_id = "project-..."   # nebius profile get shivam / console
+subnet_id  = "vpcsubnet-..." # nebius vpc subnet list

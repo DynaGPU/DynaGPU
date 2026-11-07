@@ -1,0 +1,11 @@
+[dynagpu 6326 1794061064.956586] shim loaded
+[dynagpu 6326 1794061065.021400] TSG_ALLOC fd=8 hClient=0xc1d00152 hParent=0x5c000002 hTsg=0x5c000014 engineType=1
+[dynagpu 6326 1794061065.021598] SET_TIMESLICE tsg=0x5c000014 engine=1 us=7000 ioctl=0 status=0x0 OK
+[dynagpu 6326 1794061065.021613] GET_TIMESLICE tsg=0x5c000014 ioctl=0 status=0x0 value_us=7000
+[dynagpu 6326 1794061065.079833] APP_CONTROL cmd=0xa06c0101 hObject=0x5c000014 status=0x0
+[dynagpu 6326 1794061065.081033] TSG_ALLOC fd=8 hClient=0xc1d00152 hParent=0x5c000002 hTsg=0x5c00003d engineType=11
+[dynagpu 6326 1794061065.092615] APP_CONTROL cmd=0xa06c0101 hObject=0x5c00003d status=0x0
+[dynagpu 6326 1794061065.094226] TSG_ALLOC fd=8 hClient=0xc1d00152 hParent=0x5c000002 hTsg=0x5c00004b engineType=12
+[dynagpu 6326 1794061065.106368] APP_CONTROL cmd=0xa06c0101 hObject=0x5c00004b status=0x0
+[dynagpu 6326 1794061065.148771] APP_SET_TIMESLICE hObject=0x5c000014 app_value_us=2048 (overridden)
+[dynagpu 6326 1794061065.149101] APP_CONTROL cmd=0xa06c0103 hObject=0x5c000014 status=0x0

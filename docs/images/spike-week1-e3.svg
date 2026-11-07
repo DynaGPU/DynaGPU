@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="436" viewBox="0 0 800 436" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+<rect width="800" height="436" rx="12" fill="#ffffff"/>
+<text x="24.0" y="34.0" font-size="18" fill="#0f172a" font-weight="bold" text-anchor="start">Timeslice lengths give the GPU split we ask for</text>
+<text x="24.0" y="56.0" font-size="12.5" fill="#475569" font-weight="normal" text-anchor="start">Share of GPU work done by app A, two busy apps on one NVIDIA L40S (driver 610.57.04), 5 runs each</text>
+<line x1="190.0" y1="80" x2="190.0" y2="390" stroke="#eef2f7"/>
+<text x="190.0" y="408.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="middle">0%</text>
+<line x1="317.5" y1="80" x2="317.5" y2="390" stroke="#eef2f7"/>
+<text x="317.5" y="408.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="middle">25%</text>
+<line x1="445.0" y1="80" x2="445.0" y2="390" stroke="#eef2f7"/>
+<text x="445.0" y="408.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="middle">50%</text>
+<line x1="572.5" y1="80" x2="572.5" y2="390" stroke="#eef2f7"/>
+<text x="572.5" y="408.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="middle">75%</text>
+<line x1="700.0" y1="80" x2="700.0" y2="390" stroke="#eef2f7"/>
+<text x="700.0" y="408.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="middle">100%</text>
+<text x="24.0" y="106.0" font-size="13" fill="#0f172a" font-weight="bold" text-anchor="start">No DynaGPU</text>
+<text x="24.0" y="122.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="start">CUDA default 2048 µs</text>
+<rect x="190" y="96" width="255.0" height="22" fill="#3b82f6"/>
+<rect x="445.0" y="96" width="255.0" height="22" fill="#f59e0b"/>
+<line x1="445.0" y1="92" x2="445.0" y2="122" stroke="#dc2626" stroke-width="3"/>
+<text x="710.0" y="112.0" font-size="13" fill="#0f172a" font-weight="bold" text-anchor="start">50.0%</text>
+<text x="758.0" y="112.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="start">(+0.0)</text>
+<text x="24.0" y="152.0" font-size="13" fill="#0f172a" font-weight="bold" text-anchor="start">Target 1:1</text>
+<text x="24.0" y="168.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="start">5000 / 5000 µs</text>
+<rect x="190" y="142" width="255.0" height="22" fill="#3b82f6"/>
+<rect x="445.0" y="142" width="255.0" height="22" fill="#f59e0b"/>
+<line x1="445.0" y1="138" x2="445.0" y2="168" stroke="#dc2626" stroke-width="3"/>
+<text x="710.0" y="158.0" font-size="13" fill="#0f172a" font-weight="bold" text-anchor="start">50.0%</text>
+<text x="758.0" y="158.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="start">(-0.0)</text>
+<text x="24.0" y="198.0" font-size="13" fill="#0f172a" font-weight="bold" text-anchor="start">Target 7:3</text>
+<text x="24.0" y="214.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="start">7000 / 3000 µs</text>
+<rect x="190" y="188" width="357.0" height="22" fill="#3b82f6"/>
+<rect x="547.0" y="188" width="153.0" height="22" fill="#f59e0b"/>
+<line x1="547.0" y1="184" x2="547.0" y2="214" stroke="#dc2626" stroke-width="3"/>
+<text x="710.0" y="204.0" font-size="13" fill="#0f172a" font-weight="bold" text-anchor="start">70.0%</text>
+<text x="758.0" y="204.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="start">(-0.0)</text>
+<text x="24.0" y="244.0" font-size="13" fill="#0f172a" font-weight="bold" text-anchor="start">Target 9:1</text>
+<text x="24.0" y="260.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="start">9000 / 1000 µs</text>
+<rect x="190" y="234" width="457.1" height="22" fill="#3b82f6"/>
+<rect x="647.1" y="234" width="52.9" height="22" fill="#f59e0b"/>
+<line x1="649.0" y1="230" x2="649.0" y2="260" stroke="#dc2626" stroke-width="3"/>
+<text x="710.0" y="250.0" font-size="13" fill="#0f172a" font-weight="bold" text-anchor="start">89.6%</text>
+<text x="758.0" y="250.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="start">(-0.4)</text>
+<text x="24.0" y="290.0" font-size="13" fill="#0f172a" font-weight="bold" text-anchor="start">Target 95:5</text>
+<text x="24.0" y="306.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="start">19000 / 1000 µs</text>
+<rect x="190" y="280" width="483.5" height="22" fill="#3b82f6"/>
+<rect x="673.5" y="280" width="26.5" height="22" fill="#f59e0b"/>
+<line x1="674.5" y1="276" x2="674.5" y2="306" stroke="#dc2626" stroke-width="3"/>
+<text x="710.0" y="296.0" font-size="13" fill="#0f172a" font-weight="bold" text-anchor="start">94.8%</text>
+<text x="758.0" y="296.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="start">(-0.2)</text>
+<text x="24.0" y="336.0" font-size="13" fill="#0f172a" font-weight="bold" text-anchor="start">Target 7:3-short</text>
+<text x="24.0" y="352.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="start">1400 / 600 µs</text>
+<rect x="190" y="326" width="353.1" height="22" fill="#3b82f6"/>
+<rect x="543.1" y="326" width="156.9" height="22" fill="#f59e0b"/>
+<line x1="547.0" y1="322" x2="547.0" y2="352" stroke="#dc2626" stroke-width="3"/>
+<text x="710.0" y="342.0" font-size="13" fill="#0f172a" font-weight="bold" text-anchor="start">69.2%</text>
+<text x="758.0" y="342.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="start">(-0.8)</text>
+<text x="24.0" y="428.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="start">Blue = app A, amber = app B, red tick = target. Number = measured share of A (error vs target, points).</text>
+</svg>
