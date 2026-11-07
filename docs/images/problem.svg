@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="335" viewBox="0 0 800 335" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+<rect width="800" height="335" rx="12" fill="#ffffff"/>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#e2e8f0"/><line x1="0" y1="0" x2="0" y2="6" stroke="#94a3b8" stroke-width="2"/></pattern></defs>
+<text x="40" y="38" font-size="19" fill="#0f172a" font-weight="bold" text-anchor="start">Agreed split: 70% chatbot, 30% report job</text>
+<text x="40" y="78" font-size="15" fill="#0f172a" font-weight="bold" text-anchor="start">Today: the GPU gives equal turns</text>
+<rect x="40" y="90" width="360.0" height="44" rx="0" fill="#3b82f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="220.0" y="117.0" font-size="13" fill="#ffffff" font-weight="bold" text-anchor="middle">chatbot 50%</text>
+<rect x="400.0" y="90" width="360.0" height="44" rx="0" fill="#f59e0b" stroke="#ffffff" stroke-width="1.5"/>
+<text x="580.0" y="117.0" font-size="13" fill="#ffffff" font-weight="bold" text-anchor="middle">report job 50%</text>
+<line x1="544.0" y1="80" x2="544.0" y2="90" stroke="#dc2626" stroke-width="3"/>
+<line x1="544.0" y1="134" x2="544.0" y2="144" stroke="#dc2626" stroke-width="3"/>
+<text x="550.0" y="152" font-size="12" fill="#dc2626" font-weight="normal" text-anchor="start">target 70%</text>
+<text x="40" y="152" font-size="13" fill="#475569" font-weight="normal" text-anchor="start">The chatbot slows down every night the report runs</text>
+<text x="40" y="198" font-size="15" fill="#0f172a" font-weight="bold" text-anchor="start">With DynaGPU: the GPU follows the agreement</text>
+<rect x="40" y="210" width="503.99999999999994" height="44" rx="0" fill="#3b82f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="292.0" y="237.0" font-size="13" fill="#ffffff" font-weight="bold" text-anchor="middle">chatbot 70%</text>
+<rect x="544.0" y="210" width="216.00000000000003" height="44" rx="0" fill="#f59e0b" stroke="#ffffff" stroke-width="1.5"/>
+<text x="652.0" y="237.0" font-size="13" fill="#ffffff" font-weight="bold" text-anchor="middle">report job 30%</text>
+<line x1="544.0" y1="200" x2="544.0" y2="210" stroke="#dc2626" stroke-width="3"/>
+<line x1="544.0" y1="254" x2="544.0" y2="264" stroke="#dc2626" stroke-width="3"/>
+<text x="550.0" y="272" font-size="12" fill="#dc2626" font-weight="normal" text-anchor="start">target 70%</text>
+<text x="40" y="272" font-size="13" fill="#475569" font-weight="normal" text-anchor="start">The chatbot keeps its 70%, so customers don't wait</text>
+<text x="40" y="318" font-size="12" fill="#94a3b8" font-weight="normal" text-anchor="start">Share of GPU time while both apps are busy (illustration)</text>
+</svg>

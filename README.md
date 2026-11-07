@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/images/banner.png" alt="DynaGPU: fair, guaranteed GPU time for every app on Kubernetes" width="800">
+  <img src="docs/images/banner.svg" alt="DynaGPU: fair, guaranteed GPU time for every app on Kubernetes" width="800">
 </p>
 
 # DynaGPU
@@ -54,7 +54,7 @@ GPUs are expensive, so the team runs both apps on **one GPU** and agrees on a sp
 Here's what actually happens every night when the report job starts:
 
 <p align="center">
-  <img src="docs/images/problem.png" alt="Today a 70/30 split comes out about 50/50; with DynaGPU it holds" width="800">
+  <img src="docs/images/problem.svg" alt="Today a 70/30 split comes out about 50/50; with DynaGPU it holds" width="800">
 </p>
 
 - The GPU splits its time **roughly 50/50**, not 70/30.
@@ -85,7 +85,7 @@ Inside every NVIDIA GPU there is a small scheduler that rotates between apps and
 DynaGPU uses those controls for each app, based on what you asked for. Because **the GPU measures the time itself**, it doesn't matter whether an app sends one task, one very long task, or a bundle of hundreds. Nothing sits in the path of the app's work, so there's no slowdown on each launch.
 
 <p align="center">
-  <img src="docs/images/controls.png" alt="Three controls: share, limit and priority" width="800">
+  <img src="docs/images/controls.svg" alt="Three controls: share, limit and priority" width="800">
 </p>
 
 ## What you get
@@ -108,7 +108,7 @@ There are two separate paths:
 - **The work path** is your app's real work. It goes **straight to the GPU**, and DynaGPU never touches it.
 
 <p align="center">
-  <img src="docs/images/flow.png" alt="How a request flows from the user to the GPU" width="800">
+  <img src="docs/images/flow.svg" alt="How a request flows from the user to the GPU" width="800">
 </p>
 
 | Step | What happens, in plain words | The technical piece |
@@ -135,7 +135,7 @@ There are two separate paths:
 DynaGPU adds **one thin layer** to your cluster. Everything else already exists.
 
 <p align="center">
-  <img src="docs/images/architecture.png" alt="DynaGPU architecture in five layers" width="800">
+  <img src="docs/images/architecture.svg" alt="DynaGPU architecture in five layers" width="800">
 </p>
 
 | Layer | What's in it | Built by |

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="290" viewBox="0 0 800 290" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+<rect width="800" height="290" rx="12" fill="#ffffff"/>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#e2e8f0"/><line x1="0" y1="0" x2="0" y2="6" stroke="#94a3b8" stroke-width="2"/></pattern></defs>
+<rect x="20" y="20" width="240" height="250" rx="12" fill="#f8fafc" stroke="#cbd5e1" />
+<rect x="20" y="20" width="240" height="6" rx="3" fill="#3b82f6" stroke="none" />
+<text x="40" y="62" font-size="22" fill="#3b82f6" font-weight="bold" text-anchor="start">Share</text>
+<text x="40" y="86" font-size="13" fill="#475569" font-weight="normal" text-anchor="start">A guaranteed slice of GPU time</text>
+<rect x="40" y="118" width="35" height="30" rx="0" fill="#3b82f6" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="75" y="118" width="15" height="30" rx="0" fill="#f59e0b" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="90" y="118" width="35" height="30" rx="0" fill="#3b82f6" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="125" y="118" width="15" height="30" rx="0" fill="#f59e0b" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="140" y="118" width="35" height="30" rx="0" fill="#3b82f6" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="175" y="118" width="15" height="30" rx="0" fill="#f59e0b" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="190" y="118" width="35" height="30" rx="0" fill="#3b82f6" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="225" y="118" width="15" height="30" rx="0" fill="#f59e0b" stroke="#ffffff" stroke-width="1.5"/>
+<text x="40" y="166" font-size="11" fill="#94a3b8" font-weight="normal" text-anchor="start">time  →</text>
+<text x="40" y="210" font-size="13" fill="#0f172a" font-weight="normal" text-anchor="start">Chatbot 70%, report job 30%,</text>
+<text x="40" y="230" font-size="13" fill="#0f172a" font-weight="normal" text-anchor="start">whenever the GPU is busy.</text>
+<rect x="280" y="20" width="240" height="250" rx="12" fill="#f8fafc" stroke="#cbd5e1" />
+<rect x="280" y="20" width="240" height="6" rx="3" fill="#f59e0b" stroke="none" />
+<text x="300" y="62" font-size="22" fill="#f59e0b" font-weight="bold" text-anchor="start">Limit</text>
+<text x="300" y="86" font-size="13" fill="#475569" font-weight="normal" text-anchor="start">A hard cap per time window</text>
+<rect x="300" y="118" width="30" height="30" rx="0" fill="#f59e0b" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="330" y="118" width="70" height="30" rx="0" fill="url(#hatch)" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="400" y="118" width="30" height="30" rx="0" fill="#f59e0b" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="430" y="118" width="70" height="30" rx="0" fill="url(#hatch)" stroke="#ffffff" stroke-width="1.5"/>
+<text x="300" y="166" font-size="11" fill="#94a3b8" font-weight="normal" text-anchor="start">time  →</text>
+<text x="500" y="166" font-size="11" fill="#94a3b8" font-weight="normal" text-anchor="end">grey = paused</text>
+<text x="300" y="210" font-size="13" fill="#0f172a" font-weight="normal" text-anchor="start">Report job never gets more than</text>
+<text x="300" y="230" font-size="13" fill="#0f172a" font-weight="normal" text-anchor="start">30%, even when the GPU is idle.</text>
+<rect x="540" y="20" width="240" height="250" rx="12" fill="#f8fafc" stroke="#cbd5e1" />
+<rect x="540" y="20" width="240" height="6" rx="3" fill="#16a34a" stroke="none" />
+<text x="560" y="62" font-size="22" fill="#16a34a" font-weight="bold" text-anchor="start">Priority</text>
+<text x="560" y="86" font-size="13" fill="#475569" font-weight="normal" text-anchor="start">Urgent work goes first</text>
+<rect x="560" y="118" width="80" height="30" rx="0" fill="#f59e0b" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="640" y="118" width="70" height="30" rx="0" fill="#3b82f6" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="710" y="118" width="50" height="30" rx="0" fill="#f59e0b" stroke="#ffffff" stroke-width="1.5"/>
+<text x="560" y="166" font-size="11" fill="#94a3b8" font-weight="normal" text-anchor="start">time  →</text>
+<line x1="640" y1="104" x2="640" y2="116" stroke="#16a34a" stroke-width="2" marker-end="url(#a)"/>
+<text x="640" y="100" font-size="11" fill="#16a34a" font-weight="normal" text-anchor="middle">customer arrives</text>
+<text x="560" y="210" font-size="13" fill="#0f172a" font-weight="normal" text-anchor="start">A new customer question pauses</text>
+<text x="560" y="230" font-size="13" fill="#0f172a" font-weight="normal" text-anchor="start">the report job right away.</text>
+</svg>

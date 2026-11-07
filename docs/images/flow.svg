@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="610" viewBox="0 0 800 610" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+<rect width="800" height="610" rx="12" fill="#ffffff"/>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#e2e8f0"/><line x1="0" y1="0" x2="0" y2="6" stroke="#94a3b8" stroke-width="2"/></pattern></defs>
+<text x="40" y="36" font-size="15" fill="#0f172a" font-weight="bold" text-anchor="start">Control path: your request for GPU time</text>
+<text x="580" y="36" font-size="15" fill="#0f172a" font-weight="bold" text-anchor="start">Work path: your app's work</text>
+<rect x="40" y="56" width="500" height="48" rx="8" fill="#f8fafc" stroke="#cbd5e1" />
+<circle cx="66" cy="80" r="13" fill="#475569"/>
+<text x="66" y="85" font-size="13" fill="#ffffff" font-weight="bold" text-anchor="middle">1</text>
+<text x="92" y="77" font-size="14" fill="#0f172a" font-weight="bold" text-anchor="start">You</text>
+<text x="92" y="95" font-size="12" fill="#475569" font-weight="normal" text-anchor="start">Pod + ResourceClaim (memory, compute)</text>
+<line x1="290" y1="105" x2="290" y2="117" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<rect x="40" y="120" width="500" height="48" rx="8" fill="#f8fafc" stroke="#cbd5e1" />
+<circle cx="66" cy="144" r="13" fill="#475569"/>
+<text x="66" y="149" font-size="13" fill="#ffffff" font-weight="bold" text-anchor="middle">2</text>
+<text x="92" y="141" font-size="14" fill="#0f172a" font-weight="bold" text-anchor="start">kube-scheduler (DRA)</text>
+<text x="92" y="159" font-size="12" fill="#475569" font-weight="normal" text-anchor="start">Picks a GPU with room for both</text>
+<line x1="290" y1="169" x2="290" y2="181" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<rect x="40" y="184" width="500" height="48" rx="8" fill="#f8fafc" stroke="#cbd5e1" />
+<circle cx="66" cy="208" r="13" fill="#475569"/>
+<text x="66" y="213" font-size="13" fill="#ffffff" font-weight="bold" text-anchor="middle">3</text>
+<text x="92" y="205" font-size="14" fill="#0f172a" font-weight="bold" text-anchor="start">kubelet + your GPU's DRA driver</text>
+<text x="92" y="223" font-size="12" fill="#475569" font-weight="normal" text-anchor="start">Prepares the GPU, sets the memory limit</text>
+<line x1="290" y1="233" x2="290" y2="245" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<rect x="40" y="248" width="500" height="48" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+<circle cx="66" cy="272" r="13" fill="#16a34a"/>
+<text x="66" y="277" font-size="13" fill="#ffffff" font-weight="bold" text-anchor="middle">4</text>
+<text x="92" y="269" font-size="14" fill="#0f172a" font-weight="bold" text-anchor="start">DynaGPU NRI plugin</text>
+<text x="92" y="287" font-size="12" fill="#475569" font-weight="normal" text-anchor="start">Adds the shim as the container starts</text>
+<line x1="290" y1="297" x2="290" y2="309" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<rect x="40" y="312" width="500" height="48" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+<circle cx="66" cy="336" r="13" fill="#16a34a"/>
+<text x="66" y="341" font-size="13" fill="#ffffff" font-weight="bold" text-anchor="middle">5</text>
+<text x="92" y="333" font-size="14" fill="#0f172a" font-weight="bold" text-anchor="start">DynaGPU shim (inside the app)</text>
+<text x="92" y="351" font-size="12" fill="#475569" font-weight="normal" text-anchor="start">Notes the app's channel group</text>
+<line x1="290" y1="361" x2="290" y2="373" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<rect x="40" y="376" width="500" height="48" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+<circle cx="66" cy="400" r="13" fill="#16a34a"/>
+<text x="66" y="405" font-size="13" fill="#ffffff" font-weight="bold" text-anchor="middle">6</text>
+<text x="92" y="397" font-size="14" fill="#0f172a" font-weight="bold" text-anchor="start">DynaGPU node agent</text>
+<text x="92" y="415" font-size="12" fill="#475569" font-weight="normal" text-anchor="start">Works out turns, limits and priorities</text>
+<line x1="290" y1="425" x2="290" y2="437" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<rect x="40" y="440" width="500" height="48" rx="8" fill="#f8fafc" stroke="#cbd5e1" />
+<circle cx="66" cy="464" r="13" fill="#475569"/>
+<text x="66" y="469" font-size="13" fill="#ffffff" font-weight="bold" text-anchor="middle">7</text>
+<text x="92" y="461" font-size="14" fill="#0f172a" font-weight="bold" text-anchor="start">NVIDIA driver (/dev/nvidiactl)</text>
+<text x="92" y="479" font-size="12" fill="#475569" font-weight="normal" text-anchor="start">Receives the new turn lengths</text>
+<line x1="290" y1="489" x2="290" y2="501" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<rect x="40" y="504" width="500" height="48" rx="8" fill="#f8fafc" stroke="#cbd5e1" />
+<circle cx="66" cy="528" r="13" fill="#475569"/>
+<text x="66" y="533" font-size="13" fill="#ffffff" font-weight="bold" text-anchor="middle">8</text>
+<text x="92" y="525" font-size="14" fill="#0f172a" font-weight="bold" text-anchor="start">GPU turn scheduler (runlist)</text>
+<text x="92" y="543" font-size="12" fill="#475569" font-weight="normal" text-anchor="start">chatbot 7 ms, job 3 ms, repeat</text>
+<text x="580" y="80" font-size="14" fill="#475569" font-weight="normal" text-anchor="start">DynaGPU only sets the timer.</text>
+<text x="580" y="102" font-size="14" fill="#475569" font-weight="normal" text-anchor="start">Your app's work never</text>
+<text x="580" y="124" font-size="14" fill="#475569" font-weight="normal" text-anchor="start">passes through it, so there is</text>
+<text x="580" y="146" font-size="14" fill="#475569" font-weight="normal" text-anchor="start">no slowdown per task.</text>
+<rect x="580" y="312" width="180" height="48" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+<text x="670" y="342" font-size="14" fill="#0f172a" font-weight="bold" text-anchor="middle">Your app (CUDA)</text>
+<line x1="540" y1="336" x2="578" y2="336" stroke="#16a34a" stroke-width="2" stroke-dasharray="4,3"/>
+<rect x="580" y="504" width="180" height="48" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+<text x="670" y="534" font-size="14" fill="#0f172a" font-weight="bold" text-anchor="middle">GPU</text>
+<line x1="670" y1="360" x2="670" y2="502" stroke="#3b82f6" stroke-width="3" marker-end="url(#a)"/>
+<text x="680" y="396" font-size="12" fill="#475569" font-weight="normal" text-anchor="start">kernels and</text>
+<text x="680" y="414" font-size="12" fill="#475569" font-weight="normal" text-anchor="start">CUDA graphs go</text>
+<text x="680" y="432" font-size="12" fill="#475569" font-weight="normal" text-anchor="start">straight to the GPU</text>
+<rect x="40" y="580" width="12" height="12" rx="2" fill="#f0fdf4" stroke="#16a34a" />
+<text x="58" y="591" font-size="12" fill="#475569" font-weight="normal" text-anchor="start">built by DynaGPU</text>
+<rect x="180" y="580" width="12" height="12" rx="2" fill="#f8fafc" stroke="#cbd5e1" />
+<text x="198" y="591" font-size="12" fill="#475569" font-weight="normal" text-anchor="start">already in your cluster or from NVIDIA</text>
+</svg>
