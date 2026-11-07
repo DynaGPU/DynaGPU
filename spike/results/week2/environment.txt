@@ -1,0 +1,12 @@
+date_utc: 2026-11-07T15:57:21Z
+gpu: NVIDIA L40S, 46068 MiB, 2520 MHz, 95.02.66.00.02
+driver: NVRM version: NVIDIA UNIX Open Kernel Module for x86_64  610.57.04  Release Build  (dvs-builder@U22-I3-AF05-32-1)  Wed Jul 29 02:45:17 UTC 2026
+cuda_toolkit: Build cuda_13.3.r13.3/compiler.38244171_0
+kernel: 6.11.0-1016-nvidia
+os: Ubuntu 24.04.5 LTS
+pytorch: 2.15.0+cu132
+cpu: 16 vCPU, AMD EPYC-Genoa Processor
+nebius_platform: gpu-l40s-d, preset 1gpu-16vcpu-96gb
+ogkm_commit: e4a5faa 610.57.04
+dmesg_xid_errors_total: 0
+dmesg_nvrm_lines_total: 0

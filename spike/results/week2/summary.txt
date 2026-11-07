@@ -1,0 +1,39 @@
+solo short: 14561.29 kps (sd 98.45)
+solo long: 29.31 kps (sd 0.09)
+solo graph: 14366.67 kps (sd 17.00)
+E5 short-vs-short 7:3 (control): target 0.700 measured 0.701 (sd 0.000) error +0.08 pts
+E5 graph-vs-graph 7:3: target 0.700 measured 0.701 (sd 0.000) error +0.09 pts
+E5 long-vs-long 7:3: target 0.700 measured 0.701 (sd 0.001) error +0.15 pts
+E5 long-vs-short 7:3: target 0.700 measured 0.707 (sd 0.000) error +0.68 pts
+E5 short-vs-long 7:3: target 0.700 measured 0.695 (sd 0.000) error -0.54 pts
+E5 graph-vs-short 7:3: target 0.700 measured 0.706 (sd 0.000) error +0.56 pts
+E5 long-vs-short default (no DynaGPU): target 0.500 measured 0.507 (sd 0.000) error +0.66 pts
+torch 7:3 sync every 16 (week 1): measured 0.667 (sd 0.000) error -3.33 pts
+torch 7:3 sync every 256: measured 0.697 (sd 0.000) error -0.34 pts
+torch 7:3 never idle (events): measured 0.704 (sd 0.000) error +0.39 pts
+torch 7:3 CUDA graph, never idle: measured 0.704 (sd 0.000) error +0.43 pts
+E6 HP alone: p50 26 us, p99 36 us, max 49 us, pause step p99 0 us, failures 0
+E6 short LP, default turns: p50 2310 us, p99 4470 us, max 4511 us, pause step p99 0 us, failures 0
+E6 short LP, LP turns 1 ms: p50 1252 us, p99 2332 us, max 2382 us, pause step p99 0 us, failures 0
+E6 short LP, HP interleave HIGH: p50 2342 us, p99 4477 us, max 4538 us, pause step p99 0 us, failures 0
+E6 short LP, pause on request: p50 826 us, p99 998 us, max 5001 us, pause step p99 920 us, failures 0
+E6 short LP: pausing adds 962 us to p99 (pass mark 1000 us)
+E6 long LP, default turns: p50 2275 us, p99 4468 us, max 4511 us, pause step p99 0 us, failures 0
+E6 long LP, LP turns 1 ms: p50 1268 us, p99 2338 us, max 2384 us, pause step p99 0 us, failures 0
+E6 long LP, HP interleave HIGH: p50 2323 us, p99 4462 us, max 4535 us, pause step p99 0 us, failures 0
+E6 long LP, pause on request: p50 848 us, p99 1021 us, max 2360 us, pause step p99 947 us, failures 0
+E6 long LP: pausing adds 985 us to p99 (pass mark 1000 us)
+E7 2 apps at 1000 us turns: total throughput 89.4% of one app alone (loss 10.6%)
+E7 4 apps at 1000 us turns: total throughput 87.8% of one app alone (loss 12.2%)
+E7 8 apps at 1000 us turns: total throughput 86.6% of one app alone (loss 13.4%)
+E7 4 apps at default 2048 us turns: total throughput 92.7% of one app alone (loss 7.3%)
+E7 launch without shim: launch 1616 ns, round trip p50 5.2 us, p99 9.2 us
+E7 launch with shim: launch 1631 ns, round trip p50 5.2 us, p99 9.3 us
+E8 10 ms kernels: 10000 pause cycles OK, 0 failed; checksum MATCH (15beee6a0058383a vs 15beee6a0058383a); new Xid 0; hang False; pause call p50/p99 408/616 us, resume p50/p99 327/469 us
+E8 33 ms kernels (every pause lands mid-kernel): 10000 pause cycles OK, 0 failed; checksum MATCH (1c0e2ab7c84a3b45 vs 1c0e2ab7c84a3b45); new Xid 0; hang False; pause call p50/p99 400/595 us, resume p50/p99 319/465 us
+E7 sweep 2 apps at 2000 us turns: throughput 95.1% of solo (loss 4.9%)
+E7 sweep 2 apps at 3000 us turns: throughput 95.2% of solo (loss 4.8%)
+E7 sweep 2 apps at 5000 us turns: throughput 96.3% of solo (loss 3.7%)
+E7 sweep 2 apps at 10000 us turns: throughput 97.1% of solo (loss 2.9%)
+E7 sweep 4 apps at 3000 us turns: throughput 94.6% of solo (loss 5.4%)
+E7 sweep 4 apps at 5000 us turns: throughput 96.0% of solo (loss 4.0%)

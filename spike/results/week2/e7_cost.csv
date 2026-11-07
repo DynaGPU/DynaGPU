@@ -1,0 +1,13 @@
+case,apps,ts_us,rep,sum_kps,efficiency
+throughput,2,1000,0,13012.63,0.8936
+throughput,2,1000,1,13018.31,0.894
+throughput,2,1000,2,13002.25,0.8929
+throughput,4,1000,0,12783.69,0.8779
+throughput,4,1000,1,12776.44,0.8774
+throughput,4,1000,2,12778.38,0.8776
+throughput,8,1000,0,12611.18,0.8661
+throughput,8,1000,1,12605.74,0.8657
+throughput,8,1000,2,12615.63,0.8664
+throughput,4,default-2048,0,13520.3,0.9285
+throughput,4,default-2048,1,13490.69,0.9265
+throughput,4,default-2048,2,13493.75,0.9267

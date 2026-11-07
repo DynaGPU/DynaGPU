@@ -2,6 +2,33 @@
 
 Newest first. Every entry records the GPU, the driver and the exact commands.
 
+## 2026-11-07: week 2 (E5–E8), L40S, driver 610.57.04 (open)
+
+**Machine.** Same Terraform, now defaulting to `gpu-l40s-d`. It came up first try. Fresh PyTorch install gave 2.15.0+cu132 (week 1: 2.11).
+
+**New workload W2.** W1's spin kernels count clock time, so a paused long kernel would count its paused time as work. W2 does fixed integer work per thread and keeps state in GPU memory. Kernel lengths: `--iters 4000` ≈ 67 µs, 40,000 ≈ 0.66 ms, 2,000,000 ≈ 33 ms.
+
+**Pause, first try: failed silently.** `GPFIFO_SCHEDULE(bEnable=false)` + `PREEMPT` on the channel group returned `NV_OK`, but the app kept full speed through a 5 s pause. Read `kchangrpapiCtrlCmdGpFifoSchedule_IMPL`: on GSP clients it is forwarded to the firmware via RPC.
+
+**Pause, second try: works.** `NV2080_CTRL_CMD_FIFO_DISABLE_CHANNELS` (flags `0x10108`, non-privileged) on the subdevice, listing the group's channels. The shim now records subdevices (`0x2080`) and GPFIFO channels (class `0xc56f`; 8 per compute group). A 5 s pause cut throughput by exactly 5 s' worth. Pause ≈ 0.4 ms, resume ≈ 0.3 ms.
+
+**Bug: second app failed with `0x23 INVALID_CLIENT`.** Its subdevice was under client `0xc1d000a2`, its channel group under `0xc1d000a6`. CUDA had made a short-lived client first, and the shim kept the first subdevice it saw. Fixed: one subdevice per client, matched to the group's client. After the fix 3 apps paused cleanly, with no NVRM messages.
+
+**HAMi-core.** Cloned (`1721252`). The full build failed at its test programs. Building only the library was blocked by the session's safety policy (outside code). Skipped; needs user approval.
+
+**Full run** (`run_week2.py`, about 40 min), then the E7 sweep (about 5 min):
+- E5: all 7:3 cases within 0.7 pts, including graphs and 33 ms kernels.
+- PyTorch: 66.7% (sync every 16), 69.7% (256), 70.4% (never idle). Week-1 hypothesis confirmed.
+- E6: p99 4.47 ms default → 1.00 / 1.02 ms with pausing (+962 / +985 µs vs alone; pass mark 1000). Interleave HIGH: no effect. LP turns 1 ms: 2.33 ms.
+- E7: loss 10.6% / 12.2% / 13.4% at 1 ms (2 / 4 / 8 apps) → fail. Sweep: 2 apps ≤5% from 2 ms; 4 apps from 5 ms. Launch 1616 vs 1631 ns, round trip identical.
+- E8: 2 × 10,000 cycles, checksums identical, 0 Xid, no hang. 3 of 40,000 calls took 12–190 ms (unexplained).
+
+**Design changes.** Minimum turn 5 ms. Priority by pausing. Pause with `DISABLE_CHANNELS`. Subdevice per client. Leases must allow for about 200 ms control calls.
+
+**Cleanup.** `terraform destroy`: 2 resources destroyed, none left. About 70 minutes of GPU time.
+
+**Next (week 3).** E9 (hard caps), E10 (agent dies → lease), E11 (NCCL; needs 2 GPUs), E12 (driver 535–610). Also: the HAMi-core comparison if approved, the slow-call tail, and the 1 ms vs 2 ms jump.
+
 ## 2026-11-07: week 1 (E1–E4), L40S, driver 610.57.04 (open)
 
 **Machine.** Terraform on Nebius. The first try with `gpu-l40s-a` / `1gpu-8vcpu-32gb` failed after about 5 minutes: `NotEnoughResources: VM schedule timeout`. Retried with `gpu-l40s-d` / `1gpu-16vcpu-96gb`; it came up in 28 s. The image `ubuntu24.04-cuda13-latest` already had driver 610.57.04 as the open kernel module, plus CUDA 13.3. Cloned `open-gpu-kernel-modules` at tag `610.57.04`.

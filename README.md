@@ -8,7 +8,7 @@
 
 DynaGPU lets several apps share one NVIDIA GPU and makes sure each one gets the share of GPU time it was promised. You can give an app a guaranteed share, put a hard limit on another, and let urgent work go first. If one app crashes, the others keep running.
 
-> **Status: early design.** The first feasibility tests passed on real hardware: on an NVIDIA L40S, timeslice lengths gave 70/30 and 90/10 splits within 0.4 points of target ([week-1 results](spike/results/week1.md)). Nothing here is ready for production yet, and names and settings may change.
+> **Status: early design.** The first feasibility tests passed on real hardware: on an NVIDIA L40S, timeslice lengths gave 70/30 and 90/10 splits within 0.4 points of target, shares held with CUDA graphs and 33 ms kernels, and 10,000 pause cycles left results identical ([week 1](spike/results/week1.md), [week 2](spike/results/week2.md)). Nothing here is ready for production yet, and names and settings may change.
 
 ## Contents
 
@@ -120,7 +120,7 @@ There are two separate paths:
 | 5 | When your app starts using the GPU, the helper notes its GPU "queue" | The shim records the app's channel group and registers with the node agent |
 | 6 | DynaGPU works out everyone's turns, limits and priorities | The DynaGPU node agent |
 | 7 | DynaGPU tells the GPU driver the new turn lengths | Driver control calls through `/dev/nvidiactl` |
-| 8 | The GPU takes turns: chatbot 7 ms, job 3 ms, repeat | The GPU's own turn scheduler (runlist) |
+| 8 | The GPU takes turns: chatbot about 11.7 ms, job 5 ms, repeat (a 70/30 split) | The GPU's own turn scheduler (runlist) |
 
 **While your apps are running,** DynaGPU keeps working in the background:
 
@@ -250,7 +250,7 @@ spec:
 | --- | --- | --- |
 | Does the memory fit? | 50 GB + 30 GB = 80 GB | Yes, both apps go on the same GPU |
 | Does the GPU time fit? | 70% + 30% = 100% | Yes, every promise can be kept |
-| Turn lengths | 10 ms cycle × 70% and × 30% | Chatbot 7 ms, report job 3 ms, repeat |
+| Turn lengths | 70% and 30%, with the 5 ms minimum turn | Chatbot about 11.7 ms, report job 5 ms, repeat |
 | Report job limit | 30% of each 100 ms window | At most 30 ms of GPU time per 100 ms, even at 3 AM when the chatbot is quiet |
 | Priority | Chatbot is `high`, report job is `low` | A new customer question pauses the report job straight away |
 
@@ -271,10 +271,10 @@ When every app on a GPU is busy, each app's turn is its share of a short cycle:
 turn length = cycle length × (your share ÷ total of all shares)
 ```
 
-- With shares of 70 and 30 and a 10 ms cycle, turns are **7 ms and 3 ms**.
-- Ten apps at 10% each get **1 ms** each.
-- Turns never go below a minimum, about 1 ms, so switching doesn't waste time. If a share would need a shorter turn, the whole cycle gets longer instead: 95/5 becomes 19 ms and 1 ms.
+- With shares of 70 and 30 and a 10 ms cycle, turns are **7 ms and 3 ms**. Measured on an NVIDIA L40S, that gave exactly 70.0% / 30.0%.
+- Turns never go below a minimum, so switching doesn't waste time. If a share would need a shorter turn, the whole cycle gets longer instead. Tests showed 1 ms turns cost over 10% of throughput, while 5 ms turns cost about 4% ([week-2 results](spike/results/week2.md#e7-cost)). So the minimum is being raised to **5 ms**: 70/30 becomes about 11.7 ms and 5 ms, and ten apps at 10% each get 5 ms each.
 - **Idle apps are skipped.** If the chatbot has nothing to do, the report job uses the whole GPU, unless its limit says otherwise.
+- **Priority doesn't depend on short turns.** An urgent app gets the GPU by pausing the others (about 1 ms), not by waiting for their turn to end.
 
 ## Safety first
 
@@ -297,7 +297,8 @@ DynaGPU is built to **fail open**: if anything goes wrong, your GPU goes back to
 ## Honest trade-offs
 
 - **Apps take turns; they don't run at the exact same moment.** Two small apps that could run side by side may get a bit less total work done than they would in a shared workspace. DynaGPU trades that for crash isolation and promises that hold.
-- **Switching takes a tiny bit of time,** roughly a tenth of a millisecond per switch. That's why turns stay at 1 ms or longer.
+- **Switching costs some GPU time.** On an L40S, 1 ms turns lost 10–13% of total throughput and 5 ms turns about 4%. That's why turns stay at 5 ms or longer.
+- **Pausing an app takes about 0.4 ms,** so an urgent request waits about 1 ms for the GPU instead of the usual few microseconds.
 - **Memory doesn't take turns.** A paused app keeps its memory, so all apps on a GPU must fit in memory together.
 - **Apps that span several GPUs** must be paused on all of them together, or the other parts wait. DynaGPU will handle this, and it's being tested.
 - **DynaGPU relies on driver controls that aren't officially documented.** It ships with a list of tested driver versions and switches itself off safely on anything else.
@@ -314,7 +315,7 @@ DynaGPU is built to **fail open**: if anything goes wrong, your GPU goes back to
 
 | Phase | Goal | Status |
 | --- | --- | --- |
-| 0. Feasibility test (3 weeks) | Prove on one GPU that turn lengths give the agreed shares, pausing is fast, and paused work resumes correctly | Week 1 passed ([results](spike/results/week1.md)); weeks 2–3 next |
+| 0. Feasibility test (3 weeks) | Prove on one GPU that turn lengths give the agreed shares, pausing is fast, and paused work resumes correctly | Weeks 1–2 done ([week 1](spike/results/week1.md), [week 2](spike/results/week2.md)); week 3 next |
 | 1. First release | Node agent, helper and NRI plugin, with guaranteed shares | Planned |
 | 2. Limits and priority | Hard limits per time window and instant pausing for urgent work | Planned |
 | 3. Visibility | Metrics, a ready-made dashboard and the command-line tool | Planned |

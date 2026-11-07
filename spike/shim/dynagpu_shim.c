@@ -15,6 +15,17 @@
 //                               apply it as the timeslice (runtime changes)
 //   DYNAGPU_STATE=<file>        append "pid fd hClient hTsg engineType" lines
 //                               so an outside agent can try routes B and C
+//   DYNAGPU_SOCK=<path>         listen on this Unix datagram socket for
+//                               commands from the agent (week 2):
+//                                 pause      disable scheduling + preempt now
+//                                 pause-nopreempt  disable scheduling only
+//                                 resume     enable scheduling again
+//                                 preempt    preempt once, stay scheduled
+//                                 ts <us>    set timeslice
+//                                 il <0|1|2> set interleave level (LOW/MED/HIGH)
+//                               each command gets a reply:
+//                                 "ok status=0x.. us=<time spent in driver>"
+//   DYNAGPU_INTERLEAVE=<0|1|2>  interleave level for new compute groups
 //
 // Built against NVIDIA's open-gpu-kernel-modules headers (MIT).
 
@@ -28,6 +39,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/ioctl.h>
+#include <sys/socket.h>
+#include <sys/un.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -38,6 +51,8 @@
 #include "class/cla06c.h"
 #include "alloc/alloc_channel.h"
 #include "class/cl2080_notification.h"
+#include "class/cl2080.h"
+#include "ctrl/ctrl2080/ctrl2080fifo.h"
 #include "ctrl/ctrla06c.h"
 
 #define NV_IOCTL_MAGIC 'F'
@@ -46,13 +61,23 @@
 typedef int (*ioctl_fn)(int, unsigned long, ...);
 static ioctl_fn real_ioctl;
 
+#define MAX_CHAN 16
+
 struct tsg {
   int fd;
   NvHandle hClient, hTsg;
   NvU32 engineType;
+  NvHandle hChannels[MAX_CHAN];  // GPFIFO channels allocated inside this group
+  int nchan;
 };
 static struct tsg tsgs[MAX_TSG];
 static int ntsg;
+// The app's subdevices (class NV20_SUBDEVICE_0), needed for DISABLE_CHANNELS.
+// CUDA may create a short-lived client first, so keep one per client and use
+// the subdevice of the same client that owns the channel group.
+#define MAX_SUBDEV 16
+static struct { int fd; NvHandle hClient, hSubdev; } subdevs[MAX_SUBDEV];
+static int nsubdev;
 static pthread_mutex_t mu = PTHREAD_MUTEX_INITIALIZER;
 static FILE *logf;
 static pthread_once_t once = PTHREAD_ONCE_INIT;
@@ -102,6 +127,125 @@ static void set_timeslice(struct tsg *t, NvU64 us) {
 #endif
 }
 
+static double mono_us(void) {
+  struct timespec ts;
+  clock_gettime(CLOCK_MONOTONIC, &ts);
+  return ts.tv_sec * 1e6 + ts.tv_nsec / 1e3;
+}
+
+// Apply one control to every compute channel group; return the last status.
+static NvU32 for_compute(NvU32 cmd, void *params, NvU32 size) {
+  NvU32 st = NV_OK;
+  int r;
+  for (int i = 0; i < ntsg; i++) {
+    if (tsgs[i].engineType != NV2080_ENGINE_TYPE_GRAPHICS) continue;
+    NvU32 s = rm_control(tsgs[i].fd, tsgs[i].hClient, tsgs[i].hTsg, cmd, params, size, &r);
+    if (s != NV_OK || r != 0) st = s ? s : 0xffffffff;
+  }
+  return st;
+}
+
+static NvU32 do_schedule(NvBool enable) {
+  NVA06C_CTRL_GPFIFO_SCHEDULE_PARAMS p = {0};
+  p.bEnable = enable;
+  return for_compute(NVA06C_CTRL_CMD_GPFIFO_SCHEDULE, &p, sizeof(p));
+}
+
+// Pause/resume through the subdevice: disable or enable every channel of the
+// app's compute channel groups. only_sched=false also preempts them off the
+// GPU before returning.
+static NvU32 do_disable_channels(NvBool disable, NvBool only_sched) {
+  NvU32 st = 0xfffffffc;  // no compute channels seen yet
+  for (int i = 0; i < ntsg; i++) {
+    if (tsgs[i].engineType != NV2080_ENGINE_TYPE_GRAPHICS || tsgs[i].nchan == 0) continue;
+    int sd = -1;
+    for (int k = nsubdev - 1; k >= 0; k--)
+      if (subdevs[k].hClient == tsgs[i].hClient) { sd = k; break; }
+    if (sd < 0) return 0xfffffffd;  // no subdevice under this client
+    NV2080_CTRL_FIFO_DISABLE_CHANNELS_PARAMS p;
+    memset(&p, 0, sizeof(p));
+    p.bDisable = disable;
+    p.bOnlyDisableScheduling = only_sched;
+    for (int c = 0; c < tsgs[i].nchan && c < NV2080_CTRL_FIFO_DISABLE_CHANNELS_MAX_ENTRIES; c++) {
+      p.hClientList[p.numChannels] = tsgs[i].hClient;
+      p.hChannelList[p.numChannels] = tsgs[i].hChannels[c];
+      p.numChannels++;
+    }
+    int r;
+    st = rm_control(subdevs[sd].fd, subdevs[sd].hClient, subdevs[sd].hSubdev,
+                    NV2080_CTRL_CMD_FIFO_DISABLE_CHANNELS, &p, sizeof(p), &r);
+    if (r != 0) st = 0xffffffff;
+    if (st != NV_OK) return st;
+  }
+  return st;
+}
+
+static NvU32 do_preempt(void) {
+  NVA06C_CTRL_PREEMPT_PARAMS p = {0};
+  p.bWait = NV_TRUE;
+  return for_compute(NVA06C_CTRL_CMD_PREEMPT, &p, sizeof(p));
+}
+
+static NvU32 do_interleave(NvU32 level) {
+  NVA06C_CTRL_INTERLEAVE_LEVEL_PARAMS p = {0};
+  p.tsgInterleaveLevel = level;
+  return for_compute(NVA06C_CTRL_CMD_SET_INTERLEAVE_LEVEL, &p, sizeof(p));
+}
+
+static void *sock_thread(void *arg) {
+  const char *path = (const char *)arg;
+  int s = socket(AF_UNIX, SOCK_DGRAM | SOCK_CLOEXEC, 0);
+  struct sockaddr_un addr = {.sun_family = AF_UNIX};
+  strncpy(addr.sun_path, path, sizeof(addr.sun_path) - 1);
+  unlink(path);
+  if (bind(s, (struct sockaddr *)&addr, sizeof(addr)) != 0) {
+    logmsg("socket bind %s failed: %s", path, strerror(errno));
+    return NULL;
+  }
+  logmsg("listening on %s", path);
+  for (;;) {
+    char buf[64] = {0};
+    struct sockaddr_un from;
+    socklen_t flen = sizeof(from);
+    ssize_t n = recvfrom(s, buf, sizeof(buf) - 1, 0, (struct sockaddr *)&from, &flen);
+    if (n <= 0) continue;
+    double t0 = mono_us();
+    NvU32 st = 0xfffffffe;  // unknown command
+    pthread_mutex_lock(&mu);
+    if (!strncmp(buf, "pause-tsg", 9)) {
+      // Week-2 first attempt: channel-group schedule off + preempt.
+      st = do_schedule(NV_FALSE);
+      if (st == NV_OK) st = do_preempt();
+    } else if (!strncmp(buf, "pause-sched", 11)) {
+      st = do_disable_channels(NV_TRUE, NV_TRUE);   // stop scheduling, don't preempt
+    } else if (!strncmp(buf, "pause", 5)) {
+      st = do_disable_channels(NV_TRUE, NV_FALSE);  // stop scheduling + preempt now
+    } else if (!strncmp(buf, "resume-tsg", 10)) {
+      st = do_schedule(NV_TRUE);
+    } else if (!strncmp(buf, "resume", 6)) {
+      st = do_disable_channels(NV_FALSE, NV_FALSE);
+    } else if (!strncmp(buf, "preempt", 7)) {
+      st = do_preempt();
+    } else if (!strncmp(buf, "ts ", 3)) {
+      NVA06C_CTRL_TIMESLICE_PARAMS p = {0};
+      p.timesliceUs = strtoull(buf + 3, NULL, 10);
+      st = for_compute(NVA06C_CTRL_CMD_SET_TIMESLICE, &p, sizeof(p));
+    } else if (!strncmp(buf, "il ", 3)) {
+      st = do_interleave((NvU32)strtoul(buf + 3, NULL, 10));
+    }
+    int have = 0;
+    for (int i = 0; i < ntsg; i++) have |= tsgs[i].engineType == NV2080_ENGINE_TYPE_GRAPHICS;
+    pthread_mutex_unlock(&mu);
+    double dt = mono_us() - t0;
+    char rep[96];
+    int len = snprintf(rep, sizeof(rep), "%s status=0x%x us=%.1f groups=%d",
+                       st == NV_OK && have ? "ok" : "err", st, dt, have);
+    if (flen > sizeof(sa_family_t))
+      sendto(s, rep, len, 0, (struct sockaddr *)&from, flen);
+  }
+  return NULL;
+}
+
 static void *ctl_thread(void *arg) {
   const char *path = (const char *)arg;
   long long last = -1;
@@ -133,6 +277,12 @@ static void init(void) {
   if (ctl) {
     pthread_t th;
     pthread_create(&th, NULL, ctl_thread, (void *)ctl);
+    pthread_detach(th);
+  }
+  const char *sock = getenv("DYNAGPU_SOCK");
+  if (sock) {
+    pthread_t th;
+    pthread_create(&th, NULL, sock_thread, (void *)sock);
     pthread_detach(th);
   }
 }
@@ -171,6 +321,29 @@ int ioctl(int fd, unsigned long request, ...) {
     NVOS21_PARAMETERS *p = (NVOS21_PARAMETERS *)arg;
     NvU32 status = (size == sizeof(NVOS64_PARAMETERS)) ? ((NVOS64_PARAMETERS *)arg)->status
                                                        : p->status;
+    if (p->hClass == NV20_SUBDEVICE_0 && status == NV_OK) {
+      pthread_mutex_lock(&mu);
+      if (nsubdev < MAX_SUBDEV) {
+        subdevs[nsubdev].fd = fd;
+        subdevs[nsubdev].hClient = p->hRoot;
+        subdevs[nsubdev].hSubdev = p->hObjectNew;
+        nsubdev++;
+      }
+      pthread_mutex_unlock(&mu);
+      logmsg("SUBDEVICE_ALLOC fd=%d hClient=0x%x hSubdev=0x%x", fd, p->hRoot, p->hObjectNew);
+    } else if ((p->hClass & 0xff) == 0x6f && status == NV_OK) {
+      // A GPFIFO channel (classes xx6f); remember it if it lives in a known group.
+      pthread_mutex_lock(&mu);
+      for (int i = 0; i < ntsg; i++) {
+        if (tsgs[i].hClient == p->hRoot && tsgs[i].hTsg == p->hObjectParent &&
+            tsgs[i].nchan < MAX_CHAN) {
+          tsgs[i].hChannels[tsgs[i].nchan++] = p->hObjectNew;
+          logmsg("CHANNEL_ALLOC class=0x%x hTsg=0x%x hChannel=0x%x engineType=%u", p->hClass,
+                 p->hObjectParent, p->hObjectNew, tsgs[i].engineType);
+        }
+      }
+      pthread_mutex_unlock(&mu);
+    }
     if (p->hClass == KEPLER_CHANNEL_GROUP_A && status == NV_OK) {
       NvU32 engine = 0xffffffff;
       if (p->pAllocParms) {
@@ -203,6 +376,16 @@ int ioctl(int fd, unsigned long request, ...) {
       // engines run on their own runlists.
       if (ts && t && engine == NV2080_ENGINE_TYPE_GRAPHICS)
         set_timeslice(t, (NvU64)strtoull(ts, NULL, 10));
+      const char *il = getenv("DYNAGPU_INTERLEAVE");
+      if (il && t && engine == NV2080_ENGINE_TYPE_GRAPHICS) {
+        NVA06C_CTRL_INTERLEAVE_LEVEL_PARAMS ip = {0};
+        ip.tsgInterleaveLevel = (NvU32)strtoul(il, NULL, 10);
+        int r;
+        NvU32 st = rm_control(t->fd, t->hClient, t->hTsg, NVA06C_CTRL_CMD_SET_INTERLEAVE_LEVEL,
+                              &ip, sizeof(ip), &r);
+        logmsg("SET_INTERLEAVE tsg=0x%x level=%u ioctl=%d status=0x%x", t->hTsg,
+               ip.tsgInterleaveLevel, r, st);
+      }
     }
   } else if (nr == NV_ESC_RM_CONTROL && size == sizeof(NVOS54_PARAMETERS)) {
     // Log any channel-group controls the CUDA driver sends itself.

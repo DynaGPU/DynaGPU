@@ -2,7 +2,7 @@
 
 Code and results for the feasibility tests (E1–E12) that decide whether DynaGPU's approach works: weighted GPU time-sharing through the GPU's own channel-group timeslices.
 
-**Status:** week 1 (E1–E4) passed on 2026-11-07. See [`results/week1.md`](results/week1.md).
+**Status:** week 1 (E1–E4) passed. Week 2 (E5–E8) passed except E7 at 1 ms turns, which changed the design to a 5 ms minimum turn. Both ran 2026-11-07. See [`results/week1.md`](results/week1.md) and [`results/week2.md`](results/week2.md).
 
 ## Layout
 
@@ -11,10 +11,15 @@ Code and results for the feasibility tests (E1–E12) that decide whether DynaGP
 | [`shim/dynagpu_shim.c`](shim/dynagpu_shim.c) | `LD_PRELOAD` library. Finds each app's channel groups (E1) and sets the compute group's timeslice from inside the app (E2 route A) |
 | [`probe/agent_probe.c`](probe/agent_probe.c) | Tries to set another process's timeslice from outside (E2 routes B and C) |
 | [`workloads/w1_busy.cu`](workloads/w1_busy.cu) | W1: fixed-size spin kernels kept queued back to back; counts kernels per second |
-| [`workloads/torch_matmul.py`](workloads/torch_matmul.py) | PyTorch matrix-multiply loop for E1 and an E3 cross-check |
+| [`workloads/w2_work.cu`](workloads/w2_work.cu) | W2: fixed-work kernels (short, long, CUDA graphs), count mode with checksum, launch benchmark |
+| [`workloads/hp_probe.cu`](workloads/hp_probe.cu) | E6: high-priority request latency, optionally pausing other apps first |
+| [`workloads/torch_matmul.py`](workloads/torch_matmul.py) | PyTorch matrix-multiply loop: sync patterns and CUDA graphs |
 | [`scripts/run_spike.py`](scripts/run_spike.py) | Runs solo, default-pair, E3 and E4 tests; writes CSVs |
 | [`scripts/run_extra.py`](scripts/run_extra.py) | Runtime timeslice change and PyTorch checks |
-| [`scripts/plot_e3.py`](scripts/plot_e3.py) | Draws the E3 chart as SVG (no dependencies) |
+| [`scripts/run_week2.py`](scripts/run_week2.py) | Week 2: E5, PyTorch shortfall, E6, E7, E8 |
+| [`scripts/run_e7_sweep.py`](scripts/run_e7_sweep.py) | E7 follow-up: throughput by turn length |
+| [`scripts/dgctl.py`](scripts/dgctl.py) | Send one command to a shim's socket (`pause`, `resume`, `ts 5000`, ...) |
+| [`scripts/plot_e3.py`](scripts/plot_e3.py), [`scripts/plot_week2.py`](scripts/plot_week2.py) | Draw the charts as SVG (no dependencies) |
 | [`infra/`](infra/) | Terraform for one GPU VM on Nebius |
 | [`results/`](results/) | Reports and raw data, one folder per run |
 | [`NOTES.md`](NOTES.md) | Lab notebook |
@@ -65,6 +70,8 @@ python3 scripts/run_spike.py --bin $PWD/workloads/w1_busy \
 | `DYNAGPU_TIMESLICE_US` | Timeslice for the app's compute channel group. Also replaces CUDA's own 2048 µs setting |
 | `DYNAGPU_CTL` | File the shim checks every 50 ms. When it holds a new number, that becomes the timeslice of the running app |
 | `DYNAGPU_STATE` | File where the shim appends `pid fd hClient hTsg engineType` for each channel group |
+| `DYNAGPU_SOCK` | Unix datagram socket for agent commands: `pause` (disable channels + preempt), `pause-sched`, `resume`, `preempt`, `ts <µs>`, `il <0-2>`. Each gets a reply `ok status=0x0 us=<time>` |
+| `DYNAGPU_INTERLEAVE` | Interleave level for the compute channel group (0 low, 1 medium, 2 high) |
 | `DYNAGPU_LOG` | Log file (default: stderr) |
 
 ## Notes on Nebius

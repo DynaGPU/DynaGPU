@@ -1,0 +1,10 @@
+case,lp_kernels,p50_us,p90_us,p99_us,max_us,pause_p50_us,pause_p99_us,failures
+HP alone,-,26.5,28.1,35.8,48.8,0.0,0.0,0
+"short LP, default turns",short,2310.1,4068.7,4470.1,4510.8,0.0,0.1,0
+"short LP, LP turns 1 ms",short,1252.3,2135.2,2332.1,2381.7,0.0,0.1,0
+"short LP, HP interleave HIGH",short,2341.9,4071.6,4477.0,4538.5,0.0,0.1,0
+"short LP, pause on request",short,826.4,896.0,998.3,5001.3,751.0,919.6,0
+"long LP, default turns",long,2274.6,4046.3,4468.0,4510.7,0.0,0.2,0
+"long LP, LP turns 1 ms",long,1267.8,2149.1,2338.4,2384.0,0.0,0.1,0
+"long LP, HP interleave HIGH",long,2322.6,4072.0,4462.1,4534.9,0.0,0.1,0
+"long LP, pause on request",long,848.2,891.9,1020.7,2360.0,771.1,947.1,0

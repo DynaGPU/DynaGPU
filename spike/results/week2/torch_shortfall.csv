@@ -1,0 +1,13 @@
+case,rep,kps_a,kps_b,share_a
+sync every 16 (week 1),0,948.0,474.0,0.6667
+sync every 16 (week 1),1,950.0,475.0,0.6667
+sync every 16 (week 1),2,951.0,475.0,0.6669
+sync every 256,0,992.0,432.0,0.6966
+sync every 256,1,992.0,432.0,0.6966
+sync every 256,2,992.0,432.0,0.6966
+never idle (events),0,1012.0,426.0,0.7038
+never idle (events),1,993.0,418.0,0.7038
+never idle (events),2,1010.0,424.0,0.7043
+"CUDA graph, never idle",0,1008.0,424.0,0.7039
+"CUDA graph, never idle",1,1010.0,423.0,0.7048
+"CUDA graph, never idle",2,995.0,418.0,0.7042
