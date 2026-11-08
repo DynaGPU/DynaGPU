@@ -185,7 +185,7 @@ CUDA set its own 2048 µs turn length on every driver. Raw data: [`week3/e12-*`]
 - The E9 clock correction is measured for 40% and 80% caps only. For the other cases it is estimated.
 - E11 used 2 GPUs and one collective (all-reduce). Pipeline-parallel and many-GPU jobs were not tested.
 - The gang-scheduling test used agent-driven 100 ms windows, not the GPU's own turn timers.
-- No HAMi-core comparison: not approved.
+- The HAMi-core comparison ran afterwards on an H100: see [`hami-comparison.md`](hami-comparison.md).
 - The 12–190 ms slow-call tail from week 2 was not examined. E11's longest steps under 50 ms pauses (about 200 ms) may include it.
 
 ## What we learned for the design

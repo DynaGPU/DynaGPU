@@ -8,7 +8,7 @@ _Run 2026-11-07 on one NVIDIA L40S. Decision: **GO** for week 3, with one design
 
 | # | Question | Pass mark | Result | Verdict |
 | --- | --- | --- | --- | --- |
-| E5 | Do shares hold with CUDA graphs and long kernels? | Within ±5 points; compare with HAMi-core | All 6 weighted cases within 0.7 points. HAMi-core comparison **not run** (see below) | **Pass** (comparison pending) |
+| E5 | Do shares hold with CUDA graphs and long kernels? | Within ±5 points; compare with HAMi-core | All 6 weighted cases within 0.7 points. HAMi-core comparison run later on an H100 ([results](hami-comparison.md)): its limit had no effect on CUDA graphs and little on long kernels | **Pass** |
 | E6 | How fast is preemption? | Pausing adds ≤1 ms to p99 start delay | +962 µs (short-kernel neighbours), +985 µs (33 ms-kernel neighbours) | **Pass, narrowly** |
 | E7 | What does it cost? | ≤5% throughput loss at ≥1 ms turns; no launch-latency change | Loss 10.6% (2 apps), 12.2% (4), 13.4% (8) at 1 ms. Under 5% from 2 ms (2 apps) and 5 ms (4 apps). Launch latency unchanged | **Fail at 1 ms**; pass at ≥5 ms |
 | E8 | Does work resume correctly? | 10,000 pause cycles, identical outputs, no Xid, no hangs | 2 × 10,000 cycles, checksums identical, 0 Xid, 0 hangs, 0 failed calls | **Pass** |

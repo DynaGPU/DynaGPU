@@ -8,7 +8,7 @@
 
 DynaGPU lets several apps share one NVIDIA GPU and makes sure each one gets the share of GPU time it was promised. You can give an app a guaranteed share, put a hard limit on another, and let urgent work go first. If one app crashes, the others keep running.
 
-> **Status: early design.** The first feasibility tests passed on real hardware: on an NVIDIA L40S, timeslice lengths gave 70/30 and 90/10 splits within 0.4 points of target, shares held with CUDA graphs and 33 ms kernels, and 10,000 pause cycles left results identical. If the agent dies, paused apps resume by themselves in about 1 second, and the driver controls are the same from driver 535 to 620 ([week 1](spike/results/week1.md), [week 2](spike/results/week2.md), [week 3](spike/results/week3.md)). Nothing here is ready for production yet, and names and settings may change.
+> **Status: early design.** The first feasibility tests passed on real hardware: on an NVIDIA L40S, timeslice lengths gave 70/30 and 90/10 splits within 0.4 points of target, shares held with CUDA graphs and 33 ms kernels, and 10,000 pause cycles left results identical. If the agent dies, paused apps resume by themselves in about 1 second, and the driver controls are the same from driver 535 to 620. On an NVIDIA H100, DynaGPU held 70/30 splits and caps for CUDA graphs and long kernels, where a launch-throttling limiter (HAMi-core) did not ([week 1](spike/results/week1.md), [week 2](spike/results/week2.md), [week 3](spike/results/week3.md), [comparison](spike/results/hami-comparison.md)). Nothing here is ready for production yet, and names and settings may change.
 
 ## Contents
 
@@ -289,7 +289,7 @@ DynaGPU is built to **fail open**: if anything goes wrong, your GPU goes back to
 
 ## What DynaGPU does not do
 
-- **It doesn't limit GPU memory.** Your GPU's DRA driver plugin or NVIDIA's built-in per-container memory limits do that. DynaGPU only manages time.
+- **It doesn't limit GPU memory.** Your GPU's DRA driver plugin, NVIDIA's built-in per-container memory limits or HAMi-core do that. DynaGPU only manages time. HAMi-core's memory limit was tested in the same apps as DynaGPU and both worked ([results](spike/results/hami-comparison.md#using-both-hami-core-for-memory-dynagpu-for-time)); only one of them should limit GPU time.
 - **It doesn't decide which server or GPU an app runs on.** Kubernetes does that.
 - **It isn't a security wall between companies that don't trust each other.** Each app has its own private memory map, but for separate companies, give each its own GPU or a hardware-partitioned slice (NVIDIA MIG).
 - **It doesn't change your app.** No rebuilds and no code changes.
@@ -310,7 +310,7 @@ DynaGPU is built to **fail open**: if anything goes wrong, your GPU goes back to
 - A **DRA driver** for your GPUs that publishes GPU memory and GPU time (`compute`) as capacity.
 - A container runtime with **NRI** turned on: containerd or CRI-O.
 - **NVIDIA GPUs** from the Pascal generation or newer, on Linux.
-- A **GPU memory limiter**, such as your DRA driver's or NVIDIA's built-in per-container limits.
+- A **GPU memory limiter**, such as your DRA driver's, NVIDIA's built-in per-container limits or HAMi-core.
 
 ## Roadmap
 

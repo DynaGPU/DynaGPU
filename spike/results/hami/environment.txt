@@ -1,0 +1,6 @@
+name, driver_version, memory.total [MiB], power.limit [W], clocks.max.sm [MHz]
+NVIDIA H100 80GB HBM3, 610.57.04, 81559 MiB, 700.00 W, 1980 MHz
+NVRM version: NVIDIA UNIX Open Kernel Module for x86_64  610.57.04  Release Build  (dvs-builder@U22-I3-AF05-32-1)  Wed Jul 29 02:45:17 UTC 2026
+Build cuda_13.3.r13.3/compiler.38244171_0
+torch 2.15.0+cu132
+HAMi-core commit 1721252 Merge pull request #391 from alwaysprince05/fix/vmm-release-while-mapped

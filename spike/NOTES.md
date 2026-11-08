@@ -2,6 +2,24 @@
 
 Newest first. Every entry records the GPU, the driver and the exact commands.
 
+## 2026-11-08 (afternoon): HAMi-core comparison, 1 × H100 (driver 610.57.04)
+
+**Machine.** No L40S capacity on Nebius (1-GPU, the larger 1-GPU and the 2-GPU presets all returned `NotEnoughResources`). Switched to `gpu-h100-sxm` / `1gpu-16vcpu-200gb`; it came up first try. First run on Hopper: the shim needed no changes (GPFIFO class `0xc86f`, 4 groups per context).
+
+**Getting HAMi-core to limit anything** (commit `1721252`) took four tries:
+1. A CMake Release build linked only with `LIBRARY_PATH=/usr/local/cuda/lib64/stubs` (for `-lnvidia-ml`). It loaded, printed its messages, and changed nothing: 12,753 vs 12,757 kps at a 40% limit.
+2. Logs showed no `Into cuInit`. I suspected CUDA 13 and built W2 with CUDA 12.8, static and shared. Still nothing. **That suspicion was wrong.**
+3. Read `libvgpu.c`: its `dlsym` hook looks up its own functions in `/usr/local/vgpu/libvgpu.so` unless `CUDA_REDIRECT` is set. Set it. Still nothing.
+4. `nm -D` showed the Release build exports only `dlsym`: `CMakeLists.txt` adds `-fvisibility=hidden` for non-Debug builds. Rebuilt with `build.sh` (Debug): 208 `cu*` exports, and a 40% limit gave 41–44% on all four builds.
+
+**Comparison** (`run_hami.py`, about 40 min): see `results/hami-comparison.md`. HAMi-core: graphs 50/50 (no effect), 40% cap on graphs → 100%, long kernels → 52.8% split and 66.1% cap; short kernels fine but noisy. DynaGPU: 70.1% / 40.2–40.5% everywhere. Launch +33% with a HAMi-core limit, 0 with DynaGPU.
+
+**Bug (DynaGPU): pause failed with both loaded.** 1,981 of 2,000 calls returned `0x21`. With HAMi-core, the app makes 3 contexts (2 thrown away at start-up). Reproduced without HAMi-core: `cudaDeviceReset()` twice before work → pause fails. Fix part 1: watch `NV_ESC_RM_FREE` and try every group. Still failing; a new `dump` command showed the live group carrying 4 channels of a freed group, because `tsgs[ntsg++]` reused a slot without clearing `nchan`. Fix part 2: `memset` the slot. After both: resets 0/2/5 all pause, 51 of 2,000 calls fail and all of them at start-up, H100 quick checks pass.
+
+**Both limiting compute at once** (HAMi-core 70/30 + DynaGPU 7000/3000): 61% in one run, 75% in another. Don't.
+
+**Cleanup.** `terraform destroy`: 2 resources destroyed; 0 instances, 0 disks. About 60 minutes of H100 time.
+
 ## 2026-11-08: week 3 (E9–E12), 2 × L40S, drivers 610 / 580 / 570 / 535 (open)
 
 **Machine.** Terraform with `-var preset=2gpu-64vcpu-384gb` (E11 needs 2 GPUs). It came up first try. PyTorch 2.15.0+cu132 with NCCL 2.30.7.

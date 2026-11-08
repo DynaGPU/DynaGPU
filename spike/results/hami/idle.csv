@@ -1,0 +1,7 @@
+system,setting,rep,share
+DynaGPU,"weight 30% (3000 us turns), no cap",0,1.0012
+DynaGPU,"weight 30% (3000 us turns), no cap",1,1.0004
+DynaGPU,"weight 30% (3000 us turns), no cap",2,1.0013
+HAMi-core,CUDA_DEVICE_SM_LIMIT=30,0,0.3144
+HAMi-core,CUDA_DEVICE_SM_LIMIT=30,1,0.3152
+HAMi-core,CUDA_DEVICE_SM_LIMIT=30,2,0.3068

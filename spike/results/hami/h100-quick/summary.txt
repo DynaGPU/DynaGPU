@@ -1,0 +1,3 @@
+quick E1: 4 channel groups (engines 1,11,12,13), 20 channels, SET ok True, GET 7000 us, CUDA's own value 2048 us
+quick E3 7:3: A share 70.1% (target 70%)
+quick E8: first pause reply 'ok status=0x0 us=582.7 groups=1'; 1000 cycles, agent errors 0; checksum MATCH; call p50 463 us p99 646 us; app 16.4 s vs 13.7 s alone

@@ -147,6 +147,36 @@ static void set_timeslice(struct tsg *t, NvU64 us) {
 #endif
 }
 
+// Forget objects the app frees (NV_ESC_RM_FREE). Libraries such as HAMi-core
+// create and destroy extra CUDA contexts at start-up; without this, pause and
+// resume would also target channel groups that no longer exist. Call with mu held.
+static void forget_object(NvHandle hClient, NvHandle hOld) {
+  int whole_client = (hOld == hClient);
+  for (int i = 0; i < ntsg;) {
+    struct tsg *t = &tsgs[i];
+    if (t->hClient == hClient && (whole_client || t->hTsg == hOld || t->hDevice == hOld)) {
+      logmsg("TSG_FREED hClient=0x%x hTsg=0x%x engineType=%u", t->hClient, t->hTsg, t->engineType);
+      tsgs[i] = tsgs[--ntsg];
+      continue;
+    }
+    for (int c = 0; c < t->nchan; c++)
+      if (t->hClient == hClient && t->hChannels[c] == hOld) {
+        logmsg("CHANNEL_FREED hTsg=0x%x hChannel=0x%x", t->hTsg, hOld);
+        t->hChannels[c--] = t->hChannels[--t->nchan];
+      }
+    i++;
+  }
+  for (int k = 0; k < nsubdev;) {
+    if (subdevs[k].hClient == hClient &&
+        (whole_client || subdevs[k].hSubdev == hOld || subdevs[k].hDevice == hOld)) {
+      logmsg("SUBDEVICE_FREED hClient=0x%x hSubdev=0x%x", hClient, subdevs[k].hSubdev);
+      subdevs[k] = subdevs[--nsubdev];
+      continue;
+    }
+    k++;
+  }
+}
+
 static double mono_us(void) {
   struct timespec ts;
   clock_gettime(CLOCK_MONOTONIC, &ts);
@@ -174,8 +204,11 @@ static NvU32 do_schedule(NvBool enable) {
 // Pause/resume through the subdevice: disable or enable every channel of the
 // app's compute channel groups. only_sched=false also preempts them off the
 // GPU before returning.
+// Every compute group is tried, even after a failure; the call succeeds if
+// at least one group was paused/resumed (failures are logged).
 static NvU32 do_disable_channels(NvBool disable, NvBool only_sched) {
-  NvU32 st = 0xfffffffc;  // no compute channels seen yet
+  NvU32 st = 0xfffffffc, last_err = NV_OK;  // 0xfffffffc: no compute channels seen yet
+  int ok = 0;
   for (int i = 0; i < ntsg; i++) {
     if (tsgs[i].engineType != NV2080_ENGINE_TYPE_GRAPHICS || tsgs[i].nchan == 0) continue;
     int sd = -1;
@@ -184,7 +217,10 @@ static NvU32 do_disable_channels(NvBool disable, NvBool only_sched) {
         sd = k;
         break;
       }
-    if (sd < 0) return 0xfffffffd;  // no subdevice under this client
+    if (sd < 0) {  // no subdevice under this client
+      last_err = 0xfffffffd;
+      continue;
+    }
     NV2080_CTRL_FIFO_DISABLE_CHANNELS_PARAMS p;
     memset(&p, 0, sizeof(p));
     p.bDisable = disable;
@@ -198,9 +234,15 @@ static NvU32 do_disable_channels(NvBool disable, NvBool only_sched) {
     st = rm_control(subdevs[sd].fd, subdevs[sd].hClient, subdevs[sd].hSubdev,
                     NV2080_CTRL_CMD_FIFO_DISABLE_CHANNELS, &p, sizeof(p), &r);
     if (r != 0) st = 0xffffffff;
-    if (st != NV_OK) return st;
+    if (st == NV_OK) {
+      ok++;
+    } else {
+      last_err = st;
+      logmsg("DISABLE_CHANNELS(%d) tsg=0x%x failed status=0x%x", disable, tsgs[i].hTsg, st);
+    }
   }
-  return st;
+  if (ok) return NV_OK;
+  return last_err != NV_OK ? last_err : st;
 }
 
 static NvU32 do_preempt(void) {
@@ -238,6 +280,19 @@ static void *sock_thread(void *arg) {
     lease_last_us = mono_us();
     lease_armed = 1;
     if (!strncmp(buf, "hb", 2)) {
+      st = NV_OK;
+    } else if (!strncmp(buf, "dump", 4)) {  // debugging: log what the shim tracks
+      for (int i = 0; i < ntsg; i++) {
+        char ch[256] = {0};
+        int o = 0;
+        for (int c = 0; c < tsgs[i].nchan && o < 230; c++)
+          o += snprintf(ch + o, sizeof(ch) - o, " 0x%x", tsgs[i].hChannels[c]);
+        logmsg("DUMP tsg client=0x%x dev=0x%x tsg=0x%x engine=%u chans:%s", tsgs[i].hClient,
+               tsgs[i].hDevice, tsgs[i].hTsg, tsgs[i].engineType, ch);
+      }
+      for (int k = 0; k < nsubdev; k++)
+        logmsg("DUMP subdev client=0x%x dev=0x%x subdev=0x%x fd=%d", subdevs[k].hClient,
+               subdevs[k].hDevice, subdevs[k].hSubdev, subdevs[k].fd);
       st = NV_OK;
     } else if (!strncmp(buf, "pause-tsg", 9)) {
       // Week-2 first attempt: channel-group schedule off + preempt.
@@ -438,6 +493,7 @@ int ioctl(int fd, unsigned long request, ...) {
       struct tsg *t = NULL;
       if (ntsg < MAX_TSG) {
         t = &tsgs[ntsg++];
+        memset(t, 0, sizeof(*t));  // slots are reused after frees: no stale channels
         t->fd = fd;
         t->hClient = p->hRoot;
         t->hTsg = p->hObjectNew;
@@ -470,6 +526,13 @@ int ioctl(int fd, unsigned long request, ...) {
         logmsg("SET_INTERLEAVE tsg=0x%x level=%u ioctl=%d status=0x%x", t->hTsg,
                ip.tsgInterleaveLevel, r, st);
       }
+    }
+  } else if (nr == NV_ESC_RM_FREE && ret == 0 && size == sizeof(NVOS00_PARAMETERS)) {
+    NVOS00_PARAMETERS *p = (NVOS00_PARAMETERS *)arg;
+    if (p->status == NV_OK) {
+      pthread_mutex_lock(&mu);
+      forget_object(p->hRoot, p->hObjectOld);
+      pthread_mutex_unlock(&mu);
     }
   } else if (nr == NV_ESC_RM_CONTROL && size == sizeof(NVOS54_PARAMETERS)) {
     // Log any channel-group controls the CUDA driver sends itself.

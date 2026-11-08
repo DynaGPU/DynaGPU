@@ -2,7 +2,7 @@
 
 Code and results for the feasibility tests (E1–E12) that decide whether DynaGPU's approach works: weighted GPU time-sharing through the GPU's own channel-group timeslices.
 
-**Status: done, GO.** Week 1 (E1–E4) passed. Week 2 (E5–E8) passed except E7 at 1 ms turns, which changed the design to a 5 ms minimum turn. Week 3 (E9–E12, 2026-11-08, two GPUs) passed: the safety lease works, the driver interface is stable from 535 to 620, and multi-GPU jobs survive pausing, but they need their GPUs switched together. See [`results/week1.md`](results/week1.md), [`results/week2.md`](results/week2.md) and [`results/week3.md`](results/week3.md).
+**Status: done, GO.** Week 1 (E1–E4) passed. Week 2 (E5–E8) passed except E7 at 1 ms turns, which changed the design to a 5 ms minimum turn. Week 3 (E9–E12, 2026-11-08, two GPUs) passed: the safety lease works, the driver interface is stable from 535 to 620, and multi-GPU jobs survive pausing, but they need their GPUs switched together. See [`results/week1.md`](results/week1.md), [`results/week2.md`](results/week2.md) and [`results/week3.md`](results/week3.md). A comparison with HAMi-core on an NVIDIA H100 is in [`results/hami-comparison.md`](results/hami-comparison.md).
 
 ## Layout
 
@@ -21,10 +21,12 @@ Code and results for the feasibility tests (E1–E12) that decide whether DynaGP
 | [`scripts/run_e7_sweep.py`](scripts/run_e7_sweep.py) | E7 follow-up: throughput by turn length |
 | [`scripts/run_week3.py`](scripts/run_week3.py) | Week 3: E9 caps, E10 lease, E11 NCCL and gang scheduling, quick re-check for E12 |
 | [`scripts/clock_check.py`](scripts/clock_check.py) | E9 follow-up: GPU clock and power, flat out vs capped |
+| [`scripts/run_hami.py`](scripts/run_hami.py) | DynaGPU vs HAMi-core (splits, caps, launch cost, memory) and both together |
+| [`workloads/mem_probe.cu`](workloads/mem_probe.cu) | Reports the GPU memory an app sees and how much it can allocate |
 | [`scripts/e12_headers.py`](scripts/e12_headers.py) | E12: compare the driver interface across driver versions (no GPU needed) |
 | [`scripts/e12_driver.sh`](scripts/e12_driver.sh) | E12: swap the driver on a throwaway test machine and re-run the quick checks |
 | [`scripts/dgctl.py`](scripts/dgctl.py) | Send one command to a shim's socket (`pause`, `resume`, `ts 5000`, ...) |
-| [`scripts/plot_e3.py`](scripts/plot_e3.py), [`scripts/plot_week2.py`](scripts/plot_week2.py), [`scripts/plot_week3.py`](scripts/plot_week3.py) | Draw the charts as SVG (no dependencies) |
+| [`scripts/plot_e3.py`](scripts/plot_e3.py), [`scripts/plot_week2.py`](scripts/plot_week2.py), [`scripts/plot_week3.py`](scripts/plot_week3.py), [`scripts/plot_hami.py`](scripts/plot_hami.py) | Draw the charts as SVG (no dependencies) |
 | [`infra/`](infra/) | Terraform for one GPU VM on Nebius |
 | [`results/`](results/) | Reports and raw data, one folder per run |
 | [`NOTES.md`](NOTES.md) | Lab notebook |
@@ -75,7 +77,7 @@ python3 scripts/run_spike.py --bin $PWD/workloads/w1_busy \
 | `DYNAGPU_TIMESLICE_US` | Timeslice for the app's compute channel group. Also replaces CUDA's own 2048 µs setting |
 | `DYNAGPU_CTL` | File the shim checks every 50 ms. When it holds a new number, that becomes the timeslice of the running app |
 | `DYNAGPU_STATE` | File where the shim appends `pid fd hClient hTsg engineType` for each channel group |
-| `DYNAGPU_SOCK` | Unix datagram socket for agent commands: `pause` (disable channels + preempt), `pause-sched`, `resume`, `preempt`, `ts <µs>`, `il <0-2>`, `hb` (heartbeat). Each gets a reply `ok status=0x0 us=<time>`. `%p` in the path becomes the process ID |
+| `DYNAGPU_SOCK` | Unix datagram socket for agent commands: `pause` (disable channels + preempt), `pause-sched`, `resume`, `preempt`, `ts <µs>`, `il <0-2>`, `hb` (heartbeat), `dump` (log what the shim tracks). Each gets a reply `ok status=0x0 us=<time>`. `%p` in the path becomes the process ID |
 | `DYNAGPU_LEASE_MS` | Safety lease. Once the agent has sent a command, each command renews it. If it runs out while the app is paused or has a changed timeslice, the shim resumes the app and restores CUDA's own timeslice |
 | `DYNAGPU_INTERLEAVE` | Interleave level for the compute channel group (0 low, 1 medium, 2 high) |
 | `DYNAGPU_LOG` | Log file (default: stderr) |

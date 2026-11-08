@@ -1,0 +1,5 @@
+setup,reported_total_mib,allocated_gib,stop_reason
+nothing loaded,81071,78,cudaErrorMemoryAllocation
+DynaGPU only,81071,78,cudaErrorMemoryAllocation
+"HAMi-core, 8 GiB limit",8192,7,cudaErrorMemoryAllocation
+HAMi-core 8 GiB + DynaGPU,8192,7,cudaErrorMemoryAllocation

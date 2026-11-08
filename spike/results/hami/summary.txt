@@ -1,0 +1,46 @@
+solo short (nothing loaded): 12751.28 kps (sd 12.80)
+solo short (HAMi-core loaded, no limit): 12647.14 kps (sd 147.53)
+  HAMi-core overhead with no limit, short: +0.82%
+solo graph (nothing loaded): 12918.22 kps (sd 1.26)
+solo graph (HAMi-core loaded, no limit): 12919.11 kps (sd 1.26)
+  HAMi-core overhead with no limit, graph: -0.01%
+solo long (nothing loaded): 26.33 kps (sd 0.00)
+split 70/30 short vs short, DynaGPU: A share 70.1% (error +0.1 pts, runs 70.0-70.1%), GPU used 96.1% of one app alone
+split 70/30 short vs short, HAMi-core: A share 73.7% (error +3.7 pts, runs 69.8-76.2%), GPU used 94.9% of one app alone
+split 70/30 graph vs graph, DynaGPU: A share 70.1% (error +0.1 pts, runs 70.1-70.1%), GPU used 96.2% of one app alone
+split 70/30 graph vs graph, HAMi-core: A share 50.0% (error -20.0 pts, runs 50.0-50.0%), GPU used 91.0% of one app alone
+split 70/30 long vs long, DynaGPU: A share 70.1% (error +0.1 pts, runs 70.1-70.2%), GPU used 96.3% of one app alone
+split 70/30 long vs long, HAMi-core: A share 52.8% (error -17.2 pts, runs 50.0-54.8%), GPU used 92.2% of one app alone
+split 70/30 long vs short, DynaGPU: A share 70.1% (error +0.1 pts, runs 70.0-70.1%), GPU used 96.2% of one app alone
+split 70/30 long vs short, HAMi-core: A share 70.4% (error +0.4 pts, runs 61.7-75.9%), GPU used 94.7% of one app alone
+split 70/30 short vs long, DynaGPU: A share 70.1% (error +0.1 pts, runs 70.1-70.1%), GPU used 96.3% of one app alone
+split 70/30 short vs long, HAMi-core: A share 54.0% (error -16.0 pts, runs 49.9-58.9%), GPU used 91.8% of one app alone
+split 70/30 graph vs short, DynaGPU: A share 70.1% (error +0.1 pts, runs 70.1-70.1%), GPU used 96.3% of one app alone
+split 70/30 graph vs short, HAMi-core: A share 74.2% (error +4.2 pts, runs 71.5-77.2%), GPU used 95.2% of one app alone
+cap 20% alone, short kernels, DynaGPU: 20.5% of solo (error +0.5 pts, runs 20.4-20.5%)
+cap 20% alone, short kernels, HAMi-core: 20.9% of solo (error +0.9 pts, runs 20.9-21.0%)
+cap 40% alone, short kernels, DynaGPU: 40.3% of solo (error +0.3 pts, runs 40.3-40.4%)
+cap 40% alone, short kernels, HAMi-core: 41.0% of solo (error +1.0 pts, runs 40.8-41.2%)
+cap 80% alone, short kernels, DynaGPU: 80.1% of solo (error +0.1 pts, runs 79.7-80.4%)
+cap 80% alone, short kernels, HAMi-core: 80.7% of solo (error +0.7 pts, runs 80.4-81.2%)
+cap 40% alone, graph kernels, DynaGPU: 40.5% of solo (error +0.5 pts, runs 40.4-40.7%)
+cap 40% alone, graph kernels, HAMi-core: 100.0% of solo (error +60.0 pts, runs 100.0-100.0%)
+cap 40% alone, long kernels, DynaGPU: 40.2% of solo (error +0.2 pts, runs 39.9-40.5%)
+cap 40% alone, long kernels, HAMi-core: 66.1% of solo (error +26.1 pts, runs 60.8-69.3%)
+idle GPU, app with a 30% setting, DynaGPU: gets 100.1% of solo
+idle GPU, app with a 30% setting, HAMi-core: gets 31.2% of solo
+launch, nothing loaded: 2217 ns per launch, round trip p50 7.4 us, p99 10.6 us
+launch, HAMi-core, no limit: 2272 ns per launch, round trip p50 7.4 us, p99 10.7 us
+launch, HAMi-core, SM limit 50: 2946 ns per launch, round trip p50 7.5 us, p99 11.0 us
+launch, DynaGPU shim: 2208 ns per launch, round trip p50 7.4 us, p99 10.6 us
+launch, both loaded, no limits: 2292 ns per launch, round trip p50 7.5 us, p99 10.7 us
+memory, nothing loaded: app sees 81071 MiB, allocated 78 GiB before cudaErrorMemoryAllocation
+memory, DynaGPU only: app sees 81071 MiB, allocated 78 GiB before cudaErrorMemoryAllocation
+memory, HAMi-core, 8 GiB limit: app sees 8192 MiB, allocated 7 GiB before cudaErrorMemoryAllocation
+memory, HAMi-core 8 GiB + DynaGPU: app sees 8192 MiB, allocated 7 GiB before cudaErrorMemoryAllocation
+both loaded, DynaGPU 7000/3000: A share 70.1% (runs 70.1-70.1%)
+both loaded, 1000 DynaGPU pauses: agent errors 1981, checksum MATCH
+both limiting at once (HAMi-core 70/30 + DynaGPU 7000/3000): A share 61.0%, GPU used 96.6% of one app alone
+torch solo: 4706.0 matmuls/s
+torch 70/30, DynaGPU: A share 70.3% (runs 70.3-70.4%), GPU used 96.5% of one app alone
+torch 70/30, HAMi-core: A share 69.3% (runs 64.0-73.6%), GPU used 94.4% of one app alone

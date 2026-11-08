@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="330" viewBox="0 0 800 330" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+<rect width="800" height="330" rx="12" fill="#ffffff"/>
+<text x="24.0" y="34.0" font-size="18" fill="#0f172a" font-weight="bold" text-anchor="start">40% cap: launch throttling doesn't hold back graphs or long kernels</text>
+<text x="24.0" y="56.0" font-size="12.5" fill="#475569" font-weight="normal" text-anchor="start">Speed of one app alone with a 40% cap, vs no cap (bar = mean of 3 runs, line = range). NVIDIA H100</text>
+<rect x="24" y="68" width="12" height="12" rx="2" fill="#16a34a"/>
+<text x="42.0" y="79.0" font-size="12.5" fill="#0f172a" font-weight="normal" text-anchor="start">DynaGPU</text>
+<rect x="144" y="68" width="12" height="12" rx="2" fill="#ea580c"/>
+<text x="162.0" y="79.0" font-size="12.5" fill="#0f172a" font-weight="normal" text-anchor="start">HAMi-core</text>
+<line x1="250.0" y1="92" x2="250.0" y2="256" stroke="#eef2f7"/>
+<text x="250.0" y="274.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="middle">0%</text>
+<line x1="367.5" y1="92" x2="367.5" y2="256" stroke="#eef2f7"/>
+<text x="367.5" y="274.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="middle">25%</text>
+<line x1="485.0" y1="92" x2="485.0" y2="256" stroke="#eef2f7"/>
+<text x="485.0" y="274.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="middle">50%</text>
+<line x1="602.5" y1="92" x2="602.5" y2="256" stroke="#eef2f7"/>
+<text x="602.5" y="274.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="middle">75%</text>
+<line x1="720.0" y1="92" x2="720.0" y2="256" stroke="#eef2f7"/>
+<text x="720.0" y="274.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="middle">100%</text>
+<line x1="438.0" y1="92" x2="438.0" y2="256" stroke="#dc2626" stroke-dasharray="5,4" stroke-width="1.5"/>
+<text x="442.0" y="88.0" font-size="11.5" fill="#dc2626" font-weight="normal" text-anchor="start">cap 40%</text>
+<text x="24.0" y="124.0" font-size="13" fill="#0f172a" font-weight="normal" text-anchor="start">Short kernels</text>
+<rect x="250" y="104" width="189.5" height="15" rx="2" fill="#16a34a"/>
+<text x="445.9" y="116.0" font-size="11.5" fill="#0f172a" font-weight="bold" text-anchor="start">40.3%</text>
+<rect x="250" y="124" width="192.9" height="15" rx="2" fill="#ea580c"/>
+<text x="449.8" y="136.0" font-size="11.5" fill="#0f172a" font-weight="bold" text-anchor="start">41.0%</text>
+<text x="24.0" y="176.0" font-size="13" fill="#0f172a" font-weight="normal" text-anchor="start">CUDA graphs</text>
+<rect x="250" y="156" width="190.3" height="15" rx="2" fill="#16a34a"/>
+<text x="447.2" y="168.0" font-size="11.5" fill="#0f172a" font-weight="bold" text-anchor="start">40.5%</text>
+<rect x="250" y="176" width="470.0" height="15" rx="2" fill="#ea580c"/>
+<text x="726.0" y="188.0" font-size="11.5" fill="#0f172a" font-weight="bold" text-anchor="start">100.0%</text>
+<text x="24.0" y="228.0" font-size="13" fill="#0f172a" font-weight="normal" text-anchor="start">Long kernels (38 ms)</text>
+<rect x="250" y="208" width="188.9" height="15" rx="2" fill="#16a34a"/>
+<text x="446.4" y="220.0" font-size="11.5" fill="#0f172a" font-weight="bold" text-anchor="start">40.2%</text>
+<rect x="250" y="228" width="310.9" height="15" rx="2" fill="#ea580c"/>
+<line x1="535.6" y1="235.5" x2="575.8" y2="235.5" stroke="#0f172a" stroke-width="1.5"/>
+<text x="581.8" y="240.0" font-size="11.5" fill="#0f172a" font-weight="bold" text-anchor="start">66.1%</text>
+<text x="24.0" y="300.0" font-size="12" fill="#475569" font-weight="normal" text-anchor="start">DynaGPU pauses the app on the GPU; HAMi-core delays its kernel launches.</text>
+</svg>

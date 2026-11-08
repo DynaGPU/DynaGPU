@@ -1,0 +1,26 @@
+setup,rep,launch_ns,roundtrip_p50_us,roundtrip_p99_us
+nothing loaded,0,2234.9,7.39,10.25
+"HAMi-core, no limit",0,2251.0,7.39,10.97
+"HAMi-core, SM limit 50",0,2922.0,7.39,10.73
+DynaGPU shim,0,2173.5,7.39,10.25
+"both loaded, no limits",0,2251.1,7.39,10.25
+nothing loaded,1,2186.8,7.39,10.49
+"HAMi-core, no limit",1,2240.6,7.39,10.97
+"HAMi-core, SM limit 50",1,2899.6,7.39,10.25
+DynaGPU shim,1,2179.9,7.39,10.49
+"both loaded, no limits",1,2334.3,7.39,10.49
+nothing loaded,2,2242.0,7.39,10.49
+"HAMi-core, no limit",2,2242.7,7.39,10.49
+"HAMi-core, SM limit 50",2,2941.6,7.63,11.44
+DynaGPU shim,2,2181.4,7.39,10.49
+"both loaded, no limits",2,2289.1,7.63,11.44
+nothing loaded,3,2249.7,7.63,11.44
+"HAMi-core, no limit",3,2352.3,7.63,10.73
+"HAMi-core, SM limit 50",3,3005.6,7.63,11.21
+DynaGPU shim,3,2279.6,7.63,11.44
+"both loaded, no limits",3,2248.4,7.39,10.25
+nothing loaded,4,2170.9,7.39,10.25
+"HAMi-core, no limit",4,2274.3,7.39,10.49
+"HAMi-core, SM limit 50",4,2963.3,7.63,11.21
+DynaGPU shim,4,2224.2,7.39,10.25
+"both loaded, no limits",4,2337.2,7.63,10.97

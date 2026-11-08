@@ -1,0 +1,7 @@
+memory, nothing loaded: app sees 81071 MiB, allocated 78 GiB before cudaErrorMemoryAllocation
+memory, DynaGPU only: app sees 81071 MiB, allocated 78 GiB before cudaErrorMemoryAllocation
+memory, HAMi-core, 8 GiB limit: app sees 8192 MiB, allocated 7 GiB before cudaErrorMemoryAllocation
+memory, HAMi-core 8 GiB + DynaGPU: app sees 8192 MiB, allocated 7 GiB before cudaErrorMemoryAllocation
+both loaded, DynaGPU 7000/3000: A share 70.1% (runs 70.1-70.2%)
+both loaded, 1000 DynaGPU pauses: agent errors 51, checksum MATCH
+both limiting at once (HAMi-core 70/30 + DynaGPU 7000/3000): A share 75.0%, GPU used 97.4% of one app alone
