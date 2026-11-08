@@ -8,7 +8,7 @@
 
 DynaGPU lets several apps share one NVIDIA GPU and makes sure each one gets the share of GPU time it was promised. You can give an app a guaranteed share, put a hard limit on another, and let urgent work go first. If one app crashes, the others keep running.
 
-> **Status: early design.** The first feasibility tests passed on real hardware: on an NVIDIA L40S, timeslice lengths gave 70/30 and 90/10 splits within 0.4 points of target, shares held with CUDA graphs and 33 ms kernels, and 10,000 pause cycles left results identical ([week 1](spike/results/week1.md), [week 2](spike/results/week2.md)). Nothing here is ready for production yet, and names and settings may change.
+> **Status: early design.** The first feasibility tests passed on real hardware: on an NVIDIA L40S, timeslice lengths gave 70/30 and 90/10 splits within 0.4 points of target, shares held with CUDA graphs and 33 ms kernels, and 10,000 pause cycles left results identical. If the agent dies, paused apps resume by themselves in about 1 second, and the driver controls are the same from driver 535 to 620 ([week 1](spike/results/week1.md), [week 2](spike/results/week2.md), [week 3](spike/results/week3.md)). Nothing here is ready for production yet, and names and settings may change.
 
 ## Contents
 
@@ -282,9 +282,9 @@ DynaGPU is built to **fail open**: if anything goes wrong, your GPU goes back to
 
 | If this happens | DynaGPU does this |
 | --- | --- |
-| The node agent crashes or is being upgraded | Apps keep their last turn settings. A paused app resumes on its own within about 1 second |
+| The node agent crashes or is being upgraded | Each app's safety lease runs out after about 1 second. Paused apps resume and turns go back to normal equal turns on their own (measured: 1.05 s). When the agent returns, it applies the settings again |
 | The helper can't find an app's GPU queue | The app runs with normal turns and DynaGPU records a warning. Your app always starts |
-| A GPU driver update changes the controls | DynaGPU checks a list of tested driver versions. On a mismatch it stops enforcing on that server and reports it |
+| A GPU driver update changes the controls | DynaGPU checks a list of tested driver versions. On a mismatch it stops enforcing on that server and reports it. (The controls it uses were unchanged from driver 535 to 620.) |
 | An app exits while paused | The driver cleans up with the app. There's nothing left behind |
 
 ## What DynaGPU does not do
@@ -298,9 +298,10 @@ DynaGPU is built to **fail open**: if anything goes wrong, your GPU goes back to
 
 - **Apps take turns; they don't run at the exact same moment.** Two small apps that could run side by side may get a bit less total work done than they would in a shared workspace. DynaGPU trades that for crash isolation and promises that hold.
 - **Switching costs some GPU time.** On an L40S, 1 ms turns lost 10–13% of total throughput and 5 ms turns about 4%. That's why turns stay at 5 ms or longer.
+- **Limits are measured in GPU time, not work.** An app capped at 40% gets 40% of the GPU's time. If it runs alone, it may do a few percent more work in that time, because a GPU that is paused part of the time stays cooler and runs at a higher clock ([week-3 results](spike/results/week3.md#e9-hard-caps)).
+- **Apps that use several GPUs must switch on all of them together.** If each GPU takes turns on its own clock, a 2-GPU training job with a 70% share ran at only 35% of its speed. With turns lined up across GPUs, it ran at 70% ([week-3 results](spike/results/week3.md#e11-nccl)). DynaGPU schedules such apps as a group.
 - **Pausing an app takes about 0.4 ms,** so an urgent request waits about 1 ms for the GPU instead of the usual few microseconds.
 - **Memory doesn't take turns.** A paused app keeps its memory, so all apps on a GPU must fit in memory together.
-- **Apps that span several GPUs** must be paused on all of them together, or the other parts wait. DynaGPU will handle this, and it's being tested.
 - **DynaGPU relies on driver controls that aren't officially documented.** It ships with a list of tested driver versions and switches itself off safely on anything else.
 
 ## Requirements
@@ -315,11 +316,11 @@ DynaGPU is built to **fail open**: if anything goes wrong, your GPU goes back to
 
 | Phase | Goal | Status |
 | --- | --- | --- |
-| 0. Feasibility test (3 weeks) | Prove on one GPU that turn lengths give the agreed shares, pausing is fast, and paused work resumes correctly | Weeks 1–2 done ([week 1](spike/results/week1.md), [week 2](spike/results/week2.md)); week 3 next |
+| 0. Feasibility test (3 weeks) | Prove on one GPU that turn lengths give the agreed shares, pausing is fast, and paused work resumes correctly | Done: go ([week 1](spike/results/week1.md), [week 2](spike/results/week2.md), [week 3](spike/results/week3.md)) |
 | 1. First release | Node agent, helper and NRI plugin, with guaranteed shares | Planned |
 | 2. Limits and priority | Hard limits per time window and instant pausing for urgent work | Planned |
 | 3. Visibility | Metrics, a ready-made dashboard and the command-line tool | Planned |
-| 4. Multi-GPU and standards | Pause multi-GPU apps together, and propose a standard `compute` capacity for DRA | Planned |
+| 4. Multi-GPU and standards | Switch multi-GPU apps on all their GPUs together (tested on 2 GPUs), and propose a standard `compute` capacity for DRA | Planned |
 
 ## Glossary
 

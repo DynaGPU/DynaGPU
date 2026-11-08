@@ -18,6 +18,8 @@
 //                    framework that synchronises); default 0 = never idle
 //   --start-at T     wall-clock start time shared by several apps
 //   --label S        name printed in the output
+//   --progress-ms N  time mode: print "prog t=<epoch> done=<units>" at most
+//                    every N ms, so stalls and restarts show up (week 3, E10)
 
 #include <cuda_runtime.h>
 #include <stdint.h>
@@ -59,7 +61,7 @@ static double now_s(void) {
 
 int main(int argc, char **argv) {
   double seconds = 20, warmup = 4, start_at = 0;
-  int iters = 4000, graph = 0, sync_every = 0, launch_bench = 0;
+  int iters = 4000, graph = 0, sync_every = 0, launch_bench = 0, progress_ms = 0;
   long long kernels = 0;
   const char *label = "w2";
   for (int i = 1; i < argc; i++) {
@@ -72,6 +74,7 @@ int main(int argc, char **argv) {
     else if (!strcmp(argv[i], "--kernels")) kernels = atoll(argv[++i]);
     else if (!strcmp(argv[i], "--launch-bench")) launch_bench = 1;
     else if (!strcmp(argv[i], "--label")) label = argv[++i];
+    else if (!strcmp(argv[i], "--progress-ms")) progress_ms = atoi(argv[++i]);
   }
 
   cudaDeviceProp prop;
@@ -136,6 +139,7 @@ int main(int argc, char **argv) {
   double tm0 = t0 + warmup, tend = t0 + seconds;
   long long counted = 0, units_left = kernels > 0 ? (kernels - 1 + per_unit - 1) / per_unit : -1;
   int inflight = 0, head = 0;
+  double last_prog = 0;
 
   while (1) {
     if (kernels > 0) {
@@ -160,6 +164,10 @@ int main(int argc, char **argv) {
       done += per_unit;
       if (t >= tm0 && t <= tend) counted += per_unit;
       inflight--;
+      if (progress_ms > 0 && (t - last_prog) * 1000 >= progress_ms) {
+        printf("prog t=%.4f done=%lld\n", t, done);
+        last_prog = t;
+      }
     }
     launch_unit();
     if (units_left > 0) units_left--;

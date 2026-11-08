@@ -1,0 +1,6 @@
+case,steps_r0,steps_r1,errors,step_p50_ms,step_p99_ms,step_max_ms,gib_per_s,hang,rc,nccl_error_lines,agent_bad,xid_new
+baseline (no pauses),8801,8801,0,3.30,3.36,29.1,18.33,False,0,0,0,0
+"pause one rank / both ranks, 5 s each",7353,7353,0,3.29,3.35,5004.8,11.49,False,0,0,0,0
+"300 gang pauses (both ranks, 50 ms)",13069,13069,0,3.29,54.62,205.1,13.61,False,0,0,0,0
+"300 one-rank pauses (rank 0, 50 ms)",13028,13028,0,3.30,54.10,197.1,13.57,False,0,0,0,0
+sharing each GPU 7:3 with a busy app,3065,3065,0,6.53,6.59,35.3,6.38,False,0,0,0,0

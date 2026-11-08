@@ -1,0 +1,69 @@
+E11 gang GPUs alone (reference): 8812 steps (100.0% of GPUs alone), errors 0, step p50 3.29 ms p99 3.36 ms, agent errors 0, hang False
+E11 gang aligned 70/30 slots: 6154 steps (69.8% of GPUs alone), errors 0, step p50 3.30 ms p99 33.17 ms, agent errors 0, hang False
+E11 gang offset 70/30 slots (GPU1 50 ms behind): 3686 steps (41.8% of GPUs alone), errors 0, step p50 3.30 ms p99 32.78 ms, agent errors 0, hang False
+done
+[dynagpu 9097 1794110865.097744] shim loaded
+[dynagpu 9097 1794110865.097957] listening on /tmp/clk.sock
+[dynagpu 9097 1794110865.105019] SUBDEVICE_ALLOC fd=8 hClient=0xc1d004d0 hDevice=0x5c000002 hSubdev=0x5c000003
+[dynagpu 9097 1794110865.113801] SUBDEVICE_ALLOC fd=8 hClient=0xc1d004d0 hDevice=0x5c00000a hSubdev=0x5c00000b
+[dynagpu 9097 1794110865.217021] TSG_ALLOC fd=8 hClient=0xc1d004d0 hParent=0x5c000002 hTsg=0x5c00001f engineType=1
+[dynagpu 9097 1794110865.228382] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c000026 engineType=1
+[dynagpu 9097 1794110865.230545] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c00002c engineType=1
+[dynagpu 9097 1794110865.231952] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c000030 engineType=1
+[dynagpu 9097 1794110865.233332] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c000034 engineType=1
+[dynagpu 9097 1794110865.234712] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c000038 engineType=1
+[dynagpu 9097 1794110865.236111] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c00003c engineType=1
+[dynagpu 9097 1794110865.237471] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c000040 engineType=1
+[dynagpu 9097 1794110865.238865] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c000044 engineType=1
+[dynagpu 9097 1794110865.252054] APP_CONTROL cmd=0xa06c0101 hObject=0x5c00001f status=0x0
+[dynagpu 9097 1794110865.253195] TSG_ALLOC fd=8 hClient=0xc1d004d0 hParent=0x5c000002 hTsg=0x5c000048 engineType=11
+[dynagpu 9097 1794110865.254127] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000048 hChannel=0x5c00004a engineType=11
+[dynagpu 9097 1794110865.255112] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000048 hChannel=0x5c00004d engineType=11
+[dynagpu 9097 1794110865.256111] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000048 hChannel=0x5c000050 engineType=11
+[dynagpu 9097 1794110865.257098] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000048 hChannel=0x5c000053 engineType=11
+[dynagpu 9097 1794110865.260642] APP_CONTROL cmd=0xa06c0101 hObject=0x5c000048 status=0x0
+[dynagpu 9097 1794110865.261719] TSG_ALLOC fd=8 hClient=0xc1d004d0 hParent=0x5c000002 hTsg=0x5c000056 engineType=12
+[dynagpu 9097 1794110865.262619] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000056 hChannel=0x5c000058 engineType=12
+[dynagpu 9097 1794110865.263680] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000056 hChannel=0x5c00005b engineType=12
+[dynagpu 9097 1794110865.264686] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000056 hChannel=0x5c00005e engineType=12
+[dynagpu 9097 1794110865.265673] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000056 hChannel=0x5c000061 engineType=12
+[dynagpu 9097 1794110865.269441] APP_CONTROL cmd=0xa06c0101 hObject=0x5c000056 status=0x0
+[dynagpu 9097 1794110865.293855] APP_SET_TIMESLICE hObject=0x5c00001f app_value_us=2048
+[dynagpu 9097 1794110865.294182] APP_CONTROL cmd=0xa06c0103 hObject=0x5c00001f status=0x0
+clock check flat out: 14716 kps (100.0% of flat out), SM clock while busy 2308 MHz, mean power 350 W, max temp 69 C, throttle reasons 0x0000000000000004
+[dynagpu 9146 1794110889.462984] shim loaded
+[dynagpu 9146 1794110889.463195] listening on /tmp/clk.sock
+[dynagpu 9146 1794110889.464453] SUBDEVICE_ALLOC fd=8 hClient=0xc1d004d6 hDevice=0x5c000002 hSubdev=0x5c000003
+[dynagpu 9146 1794110889.470967] SUBDEVICE_ALLOC fd=8 hClient=0xc1d004d6 hDevice=0x5c00000a hSubdev=0x5c00000b
+[dynagpu 9146 1794110889.600031] TSG_ALLOC fd=8 hClient=0xc1d004d6 hParent=0x5c000002 hTsg=0x5c00001f engineType=1
+[dynagpu 9146 1794110889.611206] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c000026 engineType=1
+[dynagpu 9146 1794110889.613403] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c00002c engineType=1
+[dynagpu 9146 1794110889.614828] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c000030 engineType=1
+[dynagpu 9146 1794110889.616203] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c000034 engineType=1
+[dynagpu 9146 1794110889.617565] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c000038 engineType=1
+[dynagpu 9146 1794110889.618972] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c00003c engineType=1
+[dynagpu 9146 1794110889.620378] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c000040 engineType=1
+[dynagpu 9146 1794110889.621771] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c000044 engineType=1
+[dynagpu 9146 1794110889.634922] APP_CONTROL cmd=0xa06c0101 hObject=0x5c00001f status=0x0
+[dynagpu 9146 1794110889.636023] TSG_ALLOC fd=8 hClient=0xc1d004d6 hParent=0x5c000002 hTsg=0x5c000048 engineType=11
+[dynagpu 9146 1794110889.636975] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000048 hChannel=0x5c00004a engineType=11
+[dynagpu 9146 1794110889.637952] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000048 hChannel=0x5c00004d engineType=11
+[dynagpu 9146 1794110889.638921] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000048 hChannel=0x5c000050 engineType=11
+[dynagpu 9146 1794110889.639883] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000048 hChannel=0x5c000053 engineType=11
+[dynagpu 9146 1794110889.643449] APP_CONTROL cmd=0xa06c0101 hObject=0x5c000048 status=0x0
+[dynagpu 9146 1794110889.644515] TSG_ALLOC fd=8 hClient=0xc1d004d6 hParent=0x5c000002 hTsg=0x5c000056 engineType=12
+[dynagpu 9146 1794110889.645411] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000056 hChannel=0x5c000058 engineType=12
+[dynagpu 9146 1794110889.646362] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000056 hChannel=0x5c00005b engineType=12
+[dynagpu 9146 1794110889.647372] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000056 hChannel=0x5c00005e engineType=12
+[dynagpu 9146 1794110889.648324] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000056 hChannel=0x5c000061 engineType=12
+[dynagpu 9146 1794110889.652004] APP_CONTROL cmd=0xa06c0101 hObject=0x5c000056 status=0x0
+[dynagpu 9146 1794110889.676586] APP_SET_TIMESLICE hObject=0x5c00001f app_value_us=2048
+[dynagpu 9146 1794110889.676911] APP_CONTROL cmd=0xa06c0103 hObject=0x5c00001f status=0x0
+Traceback (most recent call last):
+  File "/home/dynagpu/DynaGPU/spike/scripts/clock_check.py", line 56, in <module>
+    kps, clk, pw, temp, why = run(cap)
+                              ^^^^^^^^
+  File "/home/dynagpu/DynaGPU/spike/scripts/clock_check.py", line 40, in run
+    s.sendto(b"pause", sock); s.recv(128)
+                              ^^^^^^^^^^^
+TimeoutError: timed out

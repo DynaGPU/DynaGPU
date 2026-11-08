@@ -1,0 +1,4 @@
+case,steps,errors,step_p50_ms,step_p99_ms,rate_vs_alone,agent_bad
+GPUs alone (reference),8812,0,3.29,3.36,1.0,0
+aligned 70/30 slots,6154,0,3.30,33.17,0.6984,0
+offset 70/30 slots (GPU1 50 ms behind),3686,0,3.30,32.78,0.4183,0

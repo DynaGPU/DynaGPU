@@ -1,0 +1,28 @@
+[dynagpu 7034 1794109814.038792] shim loaded
+[dynagpu 7034 1794109814.039023] listening on /tmp/e9-a.sock
+[dynagpu 7034 1794109814.041550] SUBDEVICE_ALLOC fd=8 hClient=0xc1d0021b hDevice=0x5c000002 hSubdev=0x5c000003
+[dynagpu 7034 1794109814.053840] SUBDEVICE_ALLOC fd=8 hClient=0xc1d0021b hDevice=0x5c00000a hSubdev=0x5c00000b
+[dynagpu 7034 1794109814.177632] TSG_ALLOC fd=8 hClient=0xc1d0021b hParent=0x5c000002 hTsg=0x5c00001f engineType=1
+[dynagpu 7034 1794109814.190273] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c000026 engineType=1
+[dynagpu 7034 1794109814.194130] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c00002c engineType=1
+[dynagpu 7034 1794109814.197381] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c000030 engineType=1
+[dynagpu 7034 1794109814.199490] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c000034 engineType=1
+[dynagpu 7034 1794109814.202971] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c000038 engineType=1
+[dynagpu 7034 1794109814.206052] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c00003c engineType=1
+[dynagpu 7034 1794109814.209566] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c000040 engineType=1
+[dynagpu 7034 1794109814.211743] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c000044 engineType=1
+[dynagpu 7034 1794109814.228934] APP_CONTROL cmd=0xa06c0101 hObject=0x5c00001f status=0x0
+[dynagpu 7034 1794109814.230036] TSG_ALLOC fd=8 hClient=0xc1d0021b hParent=0x5c000002 hTsg=0x5c000048 engineType=11
+[dynagpu 7034 1794109814.231049] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000048 hChannel=0x5c00004a engineType=11
+[dynagpu 7034 1794109814.233162] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000048 hChannel=0x5c00004d engineType=11
+[dynagpu 7034 1794109814.241961] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000048 hChannel=0x5c000050 engineType=11
+[dynagpu 7034 1794109814.242963] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000048 hChannel=0x5c000053 engineType=11
+[dynagpu 7034 1794109814.246925] APP_CONTROL cmd=0xa06c0101 hObject=0x5c000048 status=0x0
+[dynagpu 7034 1794109814.248607] TSG_ALLOC fd=8 hClient=0xc1d0021b hParent=0x5c000002 hTsg=0x5c000056 engineType=12
+[dynagpu 7034 1794109814.250290] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000056 hChannel=0x5c000058 engineType=12
+[dynagpu 7034 1794109814.251397] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000056 hChannel=0x5c00005b engineType=12
+[dynagpu 7034 1794109814.253706] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000056 hChannel=0x5c00005e engineType=12
+[dynagpu 7034 1794109814.254722] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000056 hChannel=0x5c000061 engineType=12
+[dynagpu 7034 1794109814.259763] APP_CONTROL cmd=0xa06c0101 hObject=0x5c000056 status=0x0
+[dynagpu 7034 1794109814.304614] APP_SET_TIMESLICE hObject=0x5c00001f app_value_us=2048
+[dynagpu 7034 1794109814.305585] APP_CONTROL cmd=0xa06c0103 hObject=0x5c00001f status=0x0

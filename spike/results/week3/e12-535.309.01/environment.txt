@@ -1,0 +1,7 @@
+NVRM version: NVIDIA UNIX Open Kernel Module for x86_64  535.309.01  Release Build  (dvs-builder@U22-I3-AF05-16-3)  Wed Mar 25 15:31:18 UTC 2026
+GCC version:  gcc version 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 
+name, driver_version, vbios_version
+NVIDIA L40S, 535.309.01, 95.02.66.00.02
+NVIDIA L40S, 535.309.01, 95.02.66.00.02
+Cuda compilation tools, release 12.8, V12.8.93
+Build cuda_12.8.r12.8/compiler.35583870_0

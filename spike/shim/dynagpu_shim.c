@@ -25,7 +25,15 @@
 //                                 il <0|1|2> set interleave level (LOW/MED/HIGH)
 //                               each command gets a reply:
 //                                 "ok status=0x.. us=<time spent in driver>"
+//                                 hb         heartbeat: only renews the lease
+//                               "%p" in the path is replaced by the pid
 //   DYNAGPU_INTERLEAVE=<0|1|2>  interleave level for new compute groups
+//   DYNAGPU_LEASE_MS=<n>        fail open (week 3, E10): once an agent has
+//                               sent a command, every command renews a lease
+//                               of n ms. If it runs out while the app is
+//                               paused or has a changed timeslice, the shim
+//                               resumes the app and restores CUDA's own
+//                               timeslice by itself.
 //
 // Built against NVIDIA's open-gpu-kernel-modules headers (MIT).
 
@@ -66,6 +74,7 @@ static ioctl_fn real_ioctl;
 struct tsg {
   int fd;
   NvHandle hClient, hTsg;
+  NvHandle hDevice;  // parent device: picks the subdevice of the same GPU
   NvU32 engineType;
   NvHandle hChannels[MAX_CHAN];  // GPFIFO channels allocated inside this group
   int nchan;
@@ -73,14 +82,25 @@ struct tsg {
 static struct tsg tsgs[MAX_TSG];
 static int ntsg;
 // The app's subdevices (class NV20_SUBDEVICE_0), needed for DISABLE_CHANNELS.
-// CUDA may create a short-lived client first, so keep one per client and use
-// the subdevice of the same client that owns the channel group.
-#define MAX_SUBDEV 16
-static struct { int fd; NvHandle hClient, hSubdev; } subdevs[MAX_SUBDEV];
+// CUDA may create a short-lived client first, and on a multi-GPU machine it
+// creates one device + subdevice per GPU under the same client. So keep them
+// all and use the subdevice with the same client AND parent device as the
+// channel group.
+#define MAX_SUBDEV 32
+static struct { int fd; NvHandle hClient, hDevice, hSubdev; } subdevs[MAX_SUBDEV];
 static int nsubdev;
 static pthread_mutex_t mu = PTHREAD_MUTEX_INITIALIZER;
 static FILE *logf;
 static pthread_once_t once = PTHREAD_ONCE_INIT;
+
+// Lease state (E10). Guarded by mu.
+static long lease_ms;          // 0 = no lease
+static double lease_last_us;   // last command from the agent (monotonic)
+static int lease_armed;        // an agent has talked to us
+static int st_paused;          // we paused the app
+static int st_ts_changed;      // the agent changed the timeslice
+static NvU64 app_default_ts = 2048;  // CUDA's own value, seen in its SET_TIMESLICE
+static char sock_path[108];
 
 static void logmsg(const char *fmt, ...) {
   struct timespec ts;
@@ -160,7 +180,10 @@ static NvU32 do_disable_channels(NvBool disable, NvBool only_sched) {
     if (tsgs[i].engineType != NV2080_ENGINE_TYPE_GRAPHICS || tsgs[i].nchan == 0) continue;
     int sd = -1;
     for (int k = nsubdev - 1; k >= 0; k--)
-      if (subdevs[k].hClient == tsgs[i].hClient) { sd = k; break; }
+      if (subdevs[k].hClient == tsgs[i].hClient && subdevs[k].hDevice == tsgs[i].hDevice) {
+        sd = k;
+        break;
+      }
     if (sd < 0) return 0xfffffffd;  // no subdevice under this client
     NV2080_CTRL_FIFO_DISABLE_CHANNELS_PARAMS p;
     memset(&p, 0, sizeof(p));
@@ -212,7 +235,11 @@ static void *sock_thread(void *arg) {
     double t0 = mono_us();
     NvU32 st = 0xfffffffe;  // unknown command
     pthread_mutex_lock(&mu);
-    if (!strncmp(buf, "pause-tsg", 9)) {
+    lease_last_us = mono_us();
+    lease_armed = 1;
+    if (!strncmp(buf, "hb", 2)) {
+      st = NV_OK;
+    } else if (!strncmp(buf, "pause-tsg", 9)) {
       // Week-2 first attempt: channel-group schedule off + preempt.
       st = do_schedule(NV_FALSE);
       if (st == NV_OK) st = do_preempt();
@@ -220,16 +247,19 @@ static void *sock_thread(void *arg) {
       st = do_disable_channels(NV_TRUE, NV_TRUE);   // stop scheduling, don't preempt
     } else if (!strncmp(buf, "pause", 5)) {
       st = do_disable_channels(NV_TRUE, NV_FALSE);  // stop scheduling + preempt now
+      if (st == NV_OK) st_paused = 1;
     } else if (!strncmp(buf, "resume-tsg", 10)) {
       st = do_schedule(NV_TRUE);
     } else if (!strncmp(buf, "resume", 6)) {
       st = do_disable_channels(NV_FALSE, NV_FALSE);
+      if (st == NV_OK) st_paused = 0;
     } else if (!strncmp(buf, "preempt", 7)) {
       st = do_preempt();
     } else if (!strncmp(buf, "ts ", 3)) {
       NVA06C_CTRL_TIMESLICE_PARAMS p = {0};
       p.timesliceUs = strtoull(buf + 3, NULL, 10);
       st = for_compute(NVA06C_CTRL_CMD_SET_TIMESLICE, &p, sizeof(p));
+      st_ts_changed = 1;
     } else if (!strncmp(buf, "il ", 3)) {
       st = do_interleave((NvU32)strtoul(buf + 3, NULL, 10));
     }
@@ -242,6 +272,36 @@ static void *sock_thread(void *arg) {
                        st == NV_OK && have ? "ok" : "err", st, dt, have);
     if (flen > sizeof(sa_family_t))
       sendto(s, rep, len, 0, (struct sockaddr *)&from, flen);
+  }
+  return NULL;
+}
+
+// Fail open: if the agent stops talking, undo what it did.
+static void *lease_thread(void *arg) {
+  (void)arg;
+  for (;;) {
+    usleep(50 * 1000);
+    pthread_mutex_lock(&mu);
+    double now = mono_us();
+    if (lease_armed && (st_paused || st_ts_changed) &&
+        now - lease_last_us > lease_ms * 1000.0) {
+      double age = (now - lease_last_us) / 1000.0;
+      NvU32 rs = NV_OK, ts = NV_OK;
+      if (st_paused) rs = do_disable_channels(NV_FALSE, NV_FALSE);
+      if (st_ts_changed) {
+        NVA06C_CTRL_TIMESLICE_PARAMS p = {0};
+        p.timesliceUs = app_default_ts;
+        ts = for_compute(NVA06C_CTRL_CMD_SET_TIMESLICE, &p, sizeof(p));
+      }
+      logmsg("LEASE_EXPIRED age_ms=%.1f was_paused=%d resume_status=0x%x "
+             "ts_reset_us=%llu ts_status=0x%x took_us=%.1f",
+             age, st_paused, rs, (unsigned long long)(st_ts_changed ? app_default_ts : 0), ts,
+             mono_us() - now);
+      st_paused = 0;
+      st_ts_changed = 0;
+      lease_armed = 0;  // until the agent talks again
+    }
+    pthread_mutex_unlock(&mu);
   }
   return NULL;
 }
@@ -281,8 +341,28 @@ static void init(void) {
   }
   const char *sock = getenv("DYNAGPU_SOCK");
   if (sock) {
+    // Replace "%p" with the pid, so several processes started with the same
+    // environment (e.g. torchrun ranks) get their own sockets.
+    size_t o = 0;
+    for (const char *c = sock; *c && o + 12 < sizeof(sock_path); c++) {
+      if (c[0] == '%' && c[1] == 'p') {
+        o += snprintf(sock_path + o, sizeof(sock_path) - o, "%d", getpid());
+        c++;
+      } else {
+        sock_path[o++] = *c;
+      }
+    }
+    sock_path[o] = 0;
     pthread_t th;
-    pthread_create(&th, NULL, sock_thread, (void *)sock);
+    pthread_create(&th, NULL, sock_thread, (void *)sock_path);
+    pthread_detach(th);
+  }
+  const char *lease = getenv("DYNAGPU_LEASE_MS");
+  if (lease && atol(lease) > 0) {
+    lease_ms = atol(lease);
+    logmsg("lease %ld ms", lease_ms);
+    pthread_t th;
+    pthread_create(&th, NULL, lease_thread, NULL);
     pthread_detach(th);
   }
 }
@@ -306,6 +386,7 @@ int ioctl(int fd, unsigned long request, ...) {
       NvU64 want = ts ? (NvU64)strtoull(ts, NULL, 10) : 0;
       logmsg("APP_SET_TIMESLICE hObject=0x%x app_value_us=%llu%s", c->hObject,
              (unsigned long long)tp->timesliceUs, want ? " (overridden)" : "");
+      if (tp->timesliceUs) app_default_ts = tp->timesliceUs;  // remember CUDA's value
       if (want) tp->timesliceUs = want;
     }
   }
@@ -326,11 +407,13 @@ int ioctl(int fd, unsigned long request, ...) {
       if (nsubdev < MAX_SUBDEV) {
         subdevs[nsubdev].fd = fd;
         subdevs[nsubdev].hClient = p->hRoot;
+        subdevs[nsubdev].hDevice = p->hObjectParent;
         subdevs[nsubdev].hSubdev = p->hObjectNew;
         nsubdev++;
       }
       pthread_mutex_unlock(&mu);
-      logmsg("SUBDEVICE_ALLOC fd=%d hClient=0x%x hSubdev=0x%x", fd, p->hRoot, p->hObjectNew);
+      logmsg("SUBDEVICE_ALLOC fd=%d hClient=0x%x hDevice=0x%x hSubdev=0x%x", fd, p->hRoot,
+             p->hObjectParent, p->hObjectNew);
     } else if ((p->hClass & 0xff) == 0x6f && status == NV_OK) {
       // A GPFIFO channel (classes xx6f); remember it if it lives in a known group.
       pthread_mutex_lock(&mu);
@@ -358,6 +441,7 @@ int ioctl(int fd, unsigned long request, ...) {
         t->fd = fd;
         t->hClient = p->hRoot;
         t->hTsg = p->hObjectNew;
+        t->hDevice = p->hObjectParent;
         t->engineType = engine;
       }
       pthread_mutex_unlock(&mu);

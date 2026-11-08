@@ -1,0 +1,70 @@
+[dynagpu 8116 1794110367.280503] shim loaded
+[dynagpu 8116 1794110367.280742] listening on /tmp/e11-8116.sock
+[dynagpu 8116 1794110367.286419] SUBDEVICE_ALLOC fd=10 hClient=0xc1d003b6 hDevice=0x5c000002 hSubdev=0x5c000003
+[dynagpu 8116 1794110367.293749] SUBDEVICE_ALLOC fd=10 hClient=0xc1d003b6 hDevice=0x5c00000a hSubdev=0x5c00000b
+[dynagpu 8116 1794110367.467272] SUBDEVICE_ALLOC fd=23 hClient=0xc1d003b9 hDevice=0xa55a0020 hSubdev=0xa55a0030
+[dynagpu 8116 1794110367.473478] SUBDEVICE_ALLOC fd=23 hClient=0xc1d003b9 hDevice=0xa55a0040 hSubdev=0xa55a0050
+[dynagpu 8134 1794110367.759253] shim loaded
+[dynagpu 8135 1794110367.759264] shim loaded
+[dynagpu 8135 1794110367.759423] listening on /tmp/e11-8135.sock
+[dynagpu 8134 1794110367.759459] listening on /tmp/e11-8134.sock
+[dynagpu 8134 1794110368.731610] SUBDEVICE_ALLOC fd=10 hClient=0xc1d003bb hDevice=0x5c000002 hSubdev=0x5c000003
+[dynagpu 8134 1794110368.738986] SUBDEVICE_ALLOC fd=10 hClient=0xc1d003bb hDevice=0x5c00000a hSubdev=0x5c00000b
+[dynagpu 8135 1794110368.742772] SUBDEVICE_ALLOC fd=10 hClient=0xc1d003bd hDevice=0x5c000002 hSubdev=0x5c000003
+[dynagpu 8135 1794110368.755379] SUBDEVICE_ALLOC fd=10 hClient=0xc1d003bd hDevice=0x5c00000a hSubdev=0x5c00000b
+[dynagpu 8134 1794110368.771109] SUBDEVICE_ALLOC fd=10 hClient=0xc1d003c0 hDevice=0x5c000002 hSubdev=0x5c000003
+[dynagpu 8134 1794110368.781344] SUBDEVICE_ALLOC fd=10 hClient=0xc1d003c0 hDevice=0x5c00000a hSubdev=0x5c00000b
+[dynagpu 8135 1794110368.784762] SUBDEVICE_ALLOC fd=10 hClient=0xc1d003c3 hDevice=0x5c000002 hSubdev=0x5c000003
+[dynagpu 8135 1794110368.796882] SUBDEVICE_ALLOC fd=10 hClient=0xc1d003c3 hDevice=0x5c00000a hSubdev=0x5c00000b
+[dynagpu 8134 1794110368.825125] TSG_ALLOC fd=10 hClient=0xc1d003c0 hParent=0x5c000002 hTsg=0x5c00001f engineType=1
+[dynagpu 8135 1794110368.834712] TSG_ALLOC fd=10 hClient=0xc1d003c3 hParent=0x5c00000a hTsg=0x5c00001f engineType=1
+[dynagpu 8134 1794110368.844324] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c000026 engineType=1
+[dynagpu 8135 1794110368.846820] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c000026 engineType=1
+[dynagpu 8134 1794110368.848624] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c00002c engineType=1
+[dynagpu 8134 1794110368.850197] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c000030 engineType=1
+[dynagpu 8135 1794110368.851246] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c00002c engineType=1
+[dynagpu 8135 1794110368.853828] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c000030 engineType=1
+[dynagpu 8134 1794110368.854396] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c000034 engineType=1
+[dynagpu 8134 1794110368.859238] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c000038 engineType=1
+[dynagpu 8135 1794110368.859797] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c000034 engineType=1
+[dynagpu 8134 1794110368.864814] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c00003c engineType=1
+[dynagpu 8135 1794110368.865365] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c000038 engineType=1
+[dynagpu 8134 1794110368.869979] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c000040 engineType=1
+[dynagpu 8135 1794110368.870535] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c00003c engineType=1
+[dynagpu 8135 1794110368.875147] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c000040 engineType=1
+[dynagpu 8134 1794110368.876106] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c000044 engineType=1
+[dynagpu 8135 1794110368.880259] CHANNEL_ALLOC class=0xc56f hTsg=0x5c00001f hChannel=0x5c000044 engineType=1
+[dynagpu 8134 1794110368.905219] APP_CONTROL cmd=0xa06c0101 hObject=0x5c00001f status=0x0
+[dynagpu 8134 1794110368.909103] TSG_ALLOC fd=10 hClient=0xc1d003c0 hParent=0x5c000002 hTsg=0x5c000048 engineType=11
+[dynagpu 8135 1794110368.911513] APP_CONTROL cmd=0xa06c0101 hObject=0x5c00001f status=0x0
+[dynagpu 8134 1794110368.912654] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000048 hChannel=0x5c00004a engineType=11
+[dynagpu 8135 1794110368.913932] TSG_ALLOC fd=10 hClient=0xc1d003c3 hParent=0x5c00000a hTsg=0x5c000048 engineType=11
+[dynagpu 8135 1794110368.915930] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000048 hChannel=0x5c00004a engineType=11
+[dynagpu 8134 1794110368.917848] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000048 hChannel=0x5c00004d engineType=11
+[dynagpu 8135 1794110368.919624] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000048 hChannel=0x5c00004d engineType=11
+[dynagpu 8134 1794110368.921512] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000048 hChannel=0x5c000050 engineType=11
+[dynagpu 8135 1794110368.923654] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000048 hChannel=0x5c000050 engineType=11
+[dynagpu 8134 1794110368.924810] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000048 hChannel=0x5c000053 engineType=11
+[dynagpu 8135 1794110368.925715] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000048 hChannel=0x5c000053 engineType=11
+[dynagpu 8134 1794110368.930703] APP_CONTROL cmd=0xa06c0101 hObject=0x5c000048 status=0x0
+[dynagpu 8134 1794110368.933112] TSG_ALLOC fd=10 hClient=0xc1d003c0 hParent=0x5c000002 hTsg=0x5c000056 engineType=12
+[dynagpu 8135 1794110368.933446] APP_CONTROL cmd=0xa06c0101 hObject=0x5c000048 status=0x0
+[dynagpu 8134 1794110368.934542] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000056 hChannel=0x5c000058 engineType=12
+[dynagpu 8135 1794110368.935285] TSG_ALLOC fd=10 hClient=0xc1d003c3 hParent=0x5c00000a hTsg=0x5c000056 engineType=12
+[dynagpu 8135 1794110368.936877] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000056 hChannel=0x5c000058 engineType=12
+[dynagpu 8134 1794110368.937768] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000056 hChannel=0x5c00005b engineType=12
+[dynagpu 8135 1794110368.938682] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000056 hChannel=0x5c00005b engineType=12
+[dynagpu 8134 1794110368.939565] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000056 hChannel=0x5c00005e engineType=12
+[dynagpu 8135 1794110368.940469] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000056 hChannel=0x5c00005e engineType=12
+[dynagpu 8134 1794110368.941361] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000056 hChannel=0x5c000061 engineType=12
+[dynagpu 8135 1794110368.943026] CHANNEL_ALLOC class=0xc56f hTsg=0x5c000056 hChannel=0x5c000061 engineType=12
+[dynagpu 8134 1794110368.947531] APP_CONTROL cmd=0xa06c0101 hObject=0x5c000056 status=0x0
+[dynagpu 8135 1794110368.949761] APP_CONTROL cmd=0xa06c0101 hObject=0x5c000056 status=0x0
+[dynagpu 8135 1794110368.975599] APP_SET_TIMESLICE hObject=0x5c00001f app_value_us=2048
+[dynagpu 8134 1794110368.975682] APP_SET_TIMESLICE hObject=0x5c00001f app_value_us=2048
+[dynagpu 8135 1794110368.975930] APP_CONTROL cmd=0xa06c0103 hObject=0x5c00001f status=0x0
+[dynagpu 8134 1794110368.976161] APP_CONTROL cmd=0xa06c0103 hObject=0x5c00001f status=0x0
+[dynagpu 8134 1794110369.170800] SUBDEVICE_ALLOC fd=47 hClient=0xc1d003ca hDevice=0xa55a0020 hSubdev=0xa55a0030
+[dynagpu 8135 1794110369.172506] SUBDEVICE_ALLOC fd=45 hClient=0xc1d003cb hDevice=0xa55a0020 hSubdev=0xa55a0030
+[dynagpu 8134 1794110369.176845] SUBDEVICE_ALLOC fd=47 hClient=0xc1d003ca hDevice=0xa55a0040 hSubdev=0xa55a0050
+[dynagpu 8135 1794110369.178465] SUBDEVICE_ALLOC fd=45 hClient=0xc1d003cb hDevice=0xa55a0040 hSubdev=0xa55a0050

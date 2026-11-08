@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="480" viewBox="0 0 800 480" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+<rect width="800" height="480" rx="12" fill="#ffffff"/>
+<text x="24.0" y="34.0" font-size="18" fill="#0f172a" font-weight="bold" text-anchor="start">Caps hold GPU time; alone, the app does a bit more work per ms</text>
+<text x="24.0" y="56.0" font-size="12.5" fill="#475569" font-weight="normal" text-anchor="start">Measured share minus cap, in points (dot = mean of 3 runs, line = range). NVIDIA L40S, 100 ms windows unless noted</text>
+<rect x="290.0" y="78" width="352.5" height="312" fill="#ecfdf5"/>
+<line x1="290.0" y1="78" x2="290.0" y2="390" stroke="#eef2f7"/>
+<text x="290.0" y="408.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="middle">-3</text>
+<line x1="348.8" y1="78" x2="348.8" y2="390" stroke="#eef2f7"/>
+<text x="348.8" y="408.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="middle">-2</text>
+<line x1="407.5" y1="78" x2="407.5" y2="390" stroke="#eef2f7"/>
+<text x="407.5" y="408.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="middle">-1</text>
+<line x1="466.2" y1="78" x2="466.2" y2="390" stroke="#cbd5e1"/>
+<text x="466.2" y="408.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="middle">0</text>
+<line x1="525.0" y1="78" x2="525.0" y2="390" stroke="#eef2f7"/>
+<text x="525.0" y="408.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="middle">+1</text>
+<line x1="583.8" y1="78" x2="583.8" y2="390" stroke="#eef2f7"/>
+<text x="583.8" y="408.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="middle">+2</text>
+<line x1="642.5" y1="78" x2="642.5" y2="390" stroke="#eef2f7"/>
+<text x="642.5" y="408.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="middle">+3</text>
+<line x1="701.2" y1="78" x2="701.2" y2="390" stroke="#eef2f7"/>
+<text x="701.2" y="408.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="middle">+4</text>
+<line x1="760.0" y1="78" x2="760.0" y2="390" stroke="#eef2f7"/>
+<text x="760.0" y="408.0" font-size="11.5" fill="#475569" font-weight="normal" text-anchor="middle">+5</text>
+<line x1="642.5" y1="78" x2="642.5" y2="390" stroke="#dc2626" stroke-dasharray="5,4" stroke-width="1.5"/>
+<text x="646.5" y="90.0" font-size="11.5" fill="#dc2626" font-weight="normal" text-anchor="start">pass mark ±3</text>
+<text x="24.0" y="95.0" font-size="13" fill="#0f172a" font-weight="normal" text-anchor="start">Alone, cap 20%</text>
+<line x1="527.9" y1="90" x2="562.0" y2="90" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+<circle cx="539.7" cy="90" r="6" fill="#3b82f6"/>
+<text x="572.0" y="95.0" font-size="12.5" fill="#0f172a" font-weight="bold" text-anchor="start">+1.2</text>
+<text x="24.0" y="129.0" font-size="13" fill="#0f172a" font-weight="normal" text-anchor="start">Alone, cap 40%</text>
+<line x1="579.6" y1="124" x2="657.2" y2="124" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+<circle cx="608.4" cy="124" r="6" fill="#3b82f6"/>
+<text x="667.2" y="129.0" font-size="12.5" fill="#0f172a" font-weight="bold" text-anchor="start">+2.4</text>
+<text x="24.0" y="163.0" font-size="13" fill="#0f172a" font-weight="normal" text-anchor="start">Alone, cap 60%</text>
+<line x1="650.7" y1="158" x2="708.3" y2="158" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+<circle cx="672.5" cy="158" r="6" fill="#3b82f6"/>
+<text x="718.3" y="163.0" font-size="12.5" fill="#0f172a" font-weight="bold" text-anchor="start">+3.5</text>
+<text x="24.0" y="197.0" font-size="13" fill="#0f172a" font-weight="normal" text-anchor="start">Alone, cap 80%</text>
+<line x1="574.9" y1="192" x2="590.8" y2="192" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+<circle cx="584.1" cy="192" r="6" fill="#3b82f6"/>
+<text x="600.8" y="197.0" font-size="12.5" fill="#0f172a" font-weight="bold" text-anchor="start">+2.0</text>
+<text x="24.0" y="231.0" font-size="13" fill="#0f172a" font-weight="normal" text-anchor="start">Alone, cap 40%, 50 ms window</text>
+<line x1="650.7" y1="226" x2="731.8" y2="226" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+<circle cx="683.6" cy="226" r="6" fill="#3b82f6"/>
+<text x="741.8" y="231.0" font-size="12.5" fill="#0f172a" font-weight="bold" text-anchor="start">+3.7</text>
+<text x="24.0" y="265.0" font-size="13" fill="#0f172a" font-weight="normal" text-anchor="start">Alone, cap 40%, 200 ms window</text>
+<line x1="606.1" y1="260" x2="631.3" y2="260" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+<circle cx="614.7" cy="260" r="6" fill="#3b82f6"/>
+<text x="641.3" y="265.0" font-size="12.5" fill="#0f172a" font-weight="bold" text-anchor="start">+2.5</text>
+<text x="24.0" y="299.0" font-size="13" fill="#0f172a" font-weight="normal" text-anchor="start">Alone, cap 40%, 33 ms kernels</text>
+<line x1="710.1" y1="294" x2="721.8" y2="294" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+<circle cx="717.9" cy="294" r="6" fill="#3b82f6"/>
+<text x="731.8" y="299.0" font-size="12.5" fill="#0f172a" font-weight="bold" text-anchor="start">+4.3</text>
+<text x="24.0" y="333.0" font-size="13" fill="#0f172a" font-weight="normal" text-anchor="start">Busy neighbour, cap 30%</text>
+<line x1="410.4" y1="328" x2="522.1" y2="328" stroke="#16a34a" stroke-width="3" stroke-linecap="round"/>
+<circle cx="449.6" cy="328" r="6" fill="#16a34a"/>
+<text x="532.1" y="333.0" font-size="12.5" fill="#0f172a" font-weight="bold" text-anchor="start">-0.3</text>
+<text x="24.0" y="367.0" font-size="13" fill="#0f172a" font-weight="normal" text-anchor="start">Busy neighbour, cap 60%</text>
+<line x1="395.8" y1="362" x2="409.3" y2="362" stroke="#16a34a" stroke-width="3" stroke-linecap="round"/>
+<circle cx="401.4" cy="362" r="6" fill="#16a34a"/>
+<text x="419.3" y="367.0" font-size="12.5" fill="#0f172a" font-weight="bold" text-anchor="start">-1.1</text>
+<text x="24.0" y="434.0" font-size="12" fill="#475569" font-weight="normal" text-anchor="start">Blue: app alone. The GPU runs 3.5–6.6% faster clocks when it is paused part of the time (measured),</text>
+<text x="24.0" y="450.0" font-size="12" fill="#475569" font-weight="normal" text-anchor="start">so the app does more work in its share of time. Green: a busy neighbour keeps the clock steady, and the cap holds.</text>
+</svg>

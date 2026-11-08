@@ -2,6 +2,33 @@
 
 Newest first. Every entry records the GPU, the driver and the exact commands.
 
+## 2026-11-08: week 3 (E9–E12), 2 × L40S, drivers 610 / 580 / 570 / 535 (open)
+
+**Machine.** Terraform with `-var preset=2gpu-64vcpu-384gb` (E11 needs 2 GPUs). It came up first try. PyTorch 2.15.0+cu132 with NCCL 2.30.7.
+
+**Shim changes.** Lease (`DYNAGPU_LEASE_MS`, watchdog every 50 ms: resume + restore CUDA's 2048 µs turn length), `hb` command, `%p` in the socket path.
+
+**Bug: pause failed with `0x21` on 2 GPUs.** The log showed two subdevices under one client (`hDevice` `0x5c000002` and `0x5c00000a`). CUDA makes a device + subdevice per GPU, and the shim took the last (GPU 1's) for an app on GPU 0. Fixed: match client **and** parent device. After that, a lease smoke test resumed a paused app 1.03 s after the agent went quiet.
+
+**Runner bugs (mine).** A stale socket file from the previous rep made `sendto` fail with `ECONNREFUSED`, and the agent crashed on the final resume to an exited app. Fixed both; restarted from the saved calibration. Separately, NCCL ranks' output lines got glued together, so each line is now one `os.write`.
+
+**Full run** (`run_week3.py`, about 30 min), then gang + clock follow-ups (about 5 min):
+- E9 alone: +1.2 to +4.3 pts over the cap. Busy neighbour: −0.3 / −1.1. Overshoot is about 6% of the cap at 20–60% and 2.5% at 80%. Hypothesis: clock boost. Clock check: flat out 2,307 MHz at the 350 W limit (reason `0x4`); 40% cap 2,460 MHz (+6.6%); 80% cap 2,389 MHz (+3.5%). Corrected: 39.8% and 79.2%. Confirmed.
+- NVML `pmon`: right ratio for steady weighted apps, wrong absolute values, unusable with pausing.
+- E10: resume 1.048–1.049 s (5/5); 9:1 → 50.0% after 1.042–1.045 s (3/3); 15/15 long pauses held with heartbeats, 0 false expiries.
+- E11: 0 errors, 0 hangs over baseline, spin test and 600 pause cycles. One rank paused → the other GPU 100% busy (spinning). Both paused → both 0%.
+- **Surprise:** each GPU shared 7:3 → all-reduce at 34.8%, not 70%. Agent slots aligned across GPUs: 69.8%. Offset 50 ms: 41.8% (overlap 40%). Gang scheduling is needed.
+
+**E12 static.** Blobless clone of `open-gpu-kernel-modules`; checked out headers for the newest tag of 15 branches (525–620). Everything the shim uses is identical from 535 to 620. Flag values looked different until I read `control.h`: NVIDIA renumbered the bits in 555 (`NON_PRIVILEGED` `0x10` → `0x8`). Decoded, every control is non-root in all 15.
+
+**E12 runtime.** The Nebius image pins every NVIDIA package (`/etc/apt/preferences.d`). 580 via the CUDA apt repo needed a full purge first (package names differ: `libnvidia-cfg1` vs `libnvidia-cfg1-580`), then a reboot. Ubuntu's `nvidia-driver-570-open` turned out to install 580. 570.211.01 and 535.309.01 went in with NVIDIA's `.run` installer after `rmmod gdrdrv` (it holds `nvidia`). Workloads for them were built with CUDA 12.8 for `sm_89`. All three passed: 70.1% split, 1,000 pauses, checksum match. The first pause on 535 took 6.3 ms.
+
+**Design changes.** Caps are a share of GPU time. The agent does its own per-app accounting. Gang scheduling for multi-GPU pods. Match subdevices by GPU. One shim build for 535–620.
+
+**Cleanup.** `terraform destroy`: 2 resources destroyed; 0 instances, 0 disks. About 75 minutes of 2 × L40S time.
+
+**Next.** The spike is done (GO). Open: the HAMi-core comparison (needs approval), the slow-call tail, the E9 long-kernel residual, gang scheduling with many GPUs, H100 / NVLink / MIG.
+
 ## 2026-11-07: week 2 (E5–E8), L40S, driver 610.57.04 (open)
 
 **Machine.** Same Terraform, now defaulting to `gpu-l40s-d`. It came up first try. Fresh PyTorch install gave 2.15.0+cu132 (week 1: 2.11).

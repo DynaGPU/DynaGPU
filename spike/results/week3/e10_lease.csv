@@ -1,0 +1,9 @@
+case,rep,last_cmd_t,lease_expired_t,resumed_t,resume_after_last_cmd_s,pause_reply,new_agent_reply,share_before,share_after
+agent dies while app paused,0,1794110011.2629,1794110012.3103,1794110012.3121,1.049,ok,ok,,
+agent dies while app paused,1,1794110027.4427,1794110028.4889,1794110028.4908,1.048,ok,ok,,
+agent dies while app paused,2,1794110044.0278,1794110045.0762,1794110045.0770,1.049,ok,ok,,
+agent dies while app paused,3,1794110060.4869,1794110061.5352,1794110061.5361,1.049,ok,ok,,
+agent dies while app paused,4,1794110076.8785,1794110077.9266,1794110077.9277,1.049,ok,ok,,
+agent sets 9:1 then dies,0,1794110097.2994,1794110098.3440,,1.045,,,0.9015,0.5
+agent sets 9:1 then dies,1,1794110115.8243,1794110116.8666,,1.042,,,0.9016,0.5004
+agent sets 9:1 then dies,2,1794110134.2718,1794110135.3155,,1.044,,,0.9013,0.4998
